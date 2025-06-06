@@ -12,5 +12,6 @@ class LoginUsuarioUseCase:
     async def execute(self, nombre: str, clave: str) -> Optional[Usuario]:
         usuario = await self.usuario_repository.obtener_por_nombre(nombre)
         if usuario and pwd_context.verify(clave, usuario.clave):
-            return usuario
+            token = crear_token_de_acceso(data={"sub": str(usuario.id)}, expires_delta=timedelta(minutes=60))
+            return token
         return None
