@@ -42,8 +42,14 @@ async def listar_usuarios(
 async def login(
     login_data: UsuarioLoginDto,
     use_case: LoginUsuarioUseCase = Depends(get_login_usuario_use_case)
-):
+):  
+    # Verificar credenciales
     usuario = await use_case.execute(login_data.nombre, login_data.clave)
     if not usuario:
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
-    return UsuarioReadDto(**usuario.__dict__)
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
+    # Generar token    
+    token = crear_token_de_acceso(data={"sub": str(usuario.id)}, expires_delta=timedelta(minutes=60))
+        return {
+        "access_token": token,
+        "token_type": "bearer"
+        }
