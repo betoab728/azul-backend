@@ -3,8 +3,9 @@ from typing import Optional
 from uuid import UUID
 
 class Usuario:
-    def __init__(self, id: UUID, correo: str, clave: str, id_rol: UUID, estado: str, created_at: datetime, updated_at: datetime):
+    def __init__(self, id: UUID,nombre: str,  correo: str, clave: str, id_rol: UUID, estado: str, created_at: datetime, updated_at: datetime):
         self.id = id
+        self.nombre = nombre
         self.correo = correo
         self.clave = clave
         self.id_rol = id_rol

@@ -1,0 +1,21 @@
+Generic single-database configuration.
+CLEAN ARCHITECTURE
+app/
+├── api/ 
+│    └──dtos
+│    └── routes/
+│        └── rol_routes.py                      
+├── config/
+│   └── settings.py       
+├── domain/
+│       └── entities/
+│             └──rol.py   # entidades del dominio  
+│       └── interfaces/ # interfaces de los repositorios     
+├── infrastructure/
+│   │── db/
+│   │   └── models/
+│   │   └── database.py      
+│   └─── repositories/    # implementación de los repositorios o interfaces      
+├── services/            
+├── use_cases/                       
+└── main.py               # Punto de entrada de FastAPI
