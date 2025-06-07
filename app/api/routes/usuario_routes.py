@@ -1,7 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime,timedelta
+from fastapi.responses import JSONResponse
+from fastapi import status
+from app.api.auth import crear_token_de_acceso
+
 #listo los usecases
 from app.use_cases.usuario.crear_usuario_usecase import CrearUsuarioUseCase
 from app.use_cases.usuario.listar_usuarios_usecase import ListarUsuariosUseCase
@@ -11,7 +15,7 @@ from app.dependencies import get_crear_usuario_use_case, get_listar_usuarios_use
 from sqlmodel.ext.asyncio.session import AsyncSession
 from pydantic import BaseModel
 #dtos
-from app.api.dtos.usuario_dto import UsuarioCreateDto, UsuarioReadDto, UsuarioLoginDto
+from app.api.dtos.usuario_dto import UsuarioCreateDto, UsuarioReadDto, UsuarioLoginDto, TokenDto
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
@@ -38,7 +42,7 @@ async def listar_usuarios(
     usuarios = await use_case.execute()
     return [UsuarioReadDto(**u.__dict__) for u in usuarios]
 
-@router.post("/login", response_model=UsuarioReadDto)
+@router.post("/login", response_model=TokenDto)
 async def login(
     login_data: UsuarioLoginDto,
     use_case: LoginUsuarioUseCase = Depends(get_login_usuario_use_case)
@@ -48,8 +52,8 @@ async def login(
     if not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
     # Generar token    
-    token = crear_token_de_acceso(data={"sub": str(usuario.id)}, expires_delta=timedelta(minutes=60))
-        return {
+    token = crear_token_de_acceso(user_id=usuario.id, expires_delta=timedelta(minutes=60))
+    return {
         "access_token": token,
         "token_type": "bearer"
-        }
+    }
