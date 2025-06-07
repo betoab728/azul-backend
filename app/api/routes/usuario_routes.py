@@ -4,7 +4,7 @@ from uuid import UUID
 from datetime import datetime,timedelta
 from fastapi.responses import JSONResponse
 from fastapi import status
-from app.api.auth import crear_token_de_acceso
+from app.api.auth import get_current_user
 
 #listo los usecases
 from app.use_cases.usuario.crear_usuario_usecase import CrearUsuarioUseCase
@@ -17,7 +17,11 @@ from pydantic import BaseModel
 #dtos
 from app.api.dtos.usuario_dto import UsuarioCreateDto, UsuarioReadDto, UsuarioLoginDto, TokenDto
 
-router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
+router = APIRouter(
+    prefix="/usuarios", 
+    tags=["Usuarios"],
+    dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
+)
 
 @router.post("/", response_model=UsuarioReadDto)
 async def crear_usuario(
@@ -42,18 +46,3 @@ async def listar_usuarios(
     usuarios = await use_case.execute()
     return [UsuarioReadDto(**u.__dict__) for u in usuarios]
 
-@router.post("/login", response_model=TokenDto)
-async def login(
-    login_data: UsuarioLoginDto,
-    use_case: LoginUsuarioUseCase = Depends(get_login_usuario_use_case)
-):  
-    # Verificar credenciales
-    usuario = await use_case.execute(login_data.nombre, login_data.clave)
-    if not usuario:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
-    # Generar token    
-    token = crear_token_de_acceso(user_id=usuario.id, expires_delta=timedelta(minutes=60))
-    return {
-        "access_token": token,
-        "token_type": "bearer"
-    }
