@@ -25,3 +25,7 @@ class UsuarioReadDto(BaseModel):
 class UsuarioLoginDto(BaseModel):
     nombre: str
     clave: str
+    
+class TokenDto(BaseModel):
+    access_token: str
+    token_type: str

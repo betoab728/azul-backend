@@ -2,6 +2,8 @@ from app.domain.entities.usuario import Usuario
 from app.domain.interfaces.usuario_repository import UsuarioRepository
 from passlib.context import CryptContext
 from typing import Optional
+from app.api.auth import crear_token_de_acceso
+from datetime import timedelta
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -12,6 +14,5 @@ class LoginUsuarioUseCase:
     async def execute(self, nombre: str, clave: str) -> Optional[Usuario]:
         usuario = await self.usuario_repository.obtener_por_nombre(nombre)
         if usuario and pwd_context.verify(clave, usuario.clave):
-            token = crear_token_de_acceso(data={"sub": str(usuario.id)}, expires_delta=timedelta(minutes=60))
-            return token
+            return usuario
         return None
