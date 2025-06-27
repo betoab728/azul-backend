@@ -17,5 +17,8 @@ app/
 │   │   └── database.py      
 │   └─── repositories/    # implementación de los repositorios o interfaces      
 ├── services/            
-├── use_cases/                       
+├── use_cases/    # casos de uso de la aplicación                     
 └── main.py               # Punto de entrada de FastAPI
+
+#resolucion de erroes 
+#1. no sale el endpoint de clasificacion , la solucion es importar el router en main.py
