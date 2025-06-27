@@ -1,14 +1,24 @@
 from fastapi import Depends
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.infrastructure.db.database import get_db
+
 from app.infrastructure.repositories.rol_repository_impl import RolRepositoryImpl
 from app.domain.interfaces.rol_repository import RolRepository
+
 from app.domain.interfaces.usuario_repository import UsuarioRepository
 from app.infrastructure.repositories.usuario_repository_impl import UsuarioRepositoryImpl
+
 from app.use_cases.rol.crear_rol_usecase import CrearRolUseCase
 from app.use_cases.rol.listar_roles_usecase import ListarRolesUseCase
+
 from app.use_cases.usuario.crear_usuario_usecase import CrearUsuarioUseCase
 from app.use_cases.usuario.listar_usuarios_usecase import ListarUsuariosUseCase
+#clasificacion
+from app.infrastructure.repositories.clasificacion_repository_impl import ClasificacionRepositoryImpl
+from app.domain.interfaces.clasificacion_repository import ClasificacionRepository
+
+from app.use_cases.clasificacion.crear_clasificacion_usecase import CrearClasificacionUseCase
+from app.use_cases.clasificacion.listar_clasificaciones_usecase import ListarClasificacionesUseCase
 
 # Inyectar repositorio
 def get_rol_repository(db: AsyncSession = Depends(get_db)) -> RolRepository:
@@ -47,3 +57,19 @@ def get_login_usuario_use_case(
 ) -> 'LoginUsuarioUseCase':
     from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
     return LoginUsuarioUseCase(repo) 
+
+##inyecciones para clasificacion
+
+#Clasificacion
+def get_clasificacion_repository(db: AsyncSession = Depends(get_db)) -> ClasificacionRepository:
+    return ClasificacionRepositoryImpl(db)
+ 
+def get_crear_clasificacion_use_case(
+    repo: 'ClasificacionRepository' = Depends(get_clasificacion_repository)
+) -> CrearClasificacionUseCase:
+    return CrearClasificacionUseCase(repo)
+
+def get_listar_clasificaciones_use_case(
+    repo: 'ClasificacionRepository' = Depends(get_clasificacion_repository)
+) -> ListarClasificacionesUseCase:
+    return ListarClasificacionesUseCase(repo)   
