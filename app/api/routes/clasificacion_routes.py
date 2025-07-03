@@ -20,6 +20,7 @@ async def crear_clasificacion(
     clasificacion = await use_case.execute(clasificacion_in.nombre)
     return ClasificacionReadDto(
         id=clasificacion.id,
+        estado=clasificacion.estado,
         nombre=clasificacion.nombre,
         created_at=clasificacion.created_at,
         updated_at=clasificacion.updated_at
