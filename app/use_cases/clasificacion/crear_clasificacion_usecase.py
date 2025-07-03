@@ -11,6 +11,7 @@ class CrearClasificacionUseCase:
         clasificacion = ClasificacionResiduo(
             id=uuid4(),
             nombre=nombre,
+            estado=1,  # Estado activo por defecto
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )

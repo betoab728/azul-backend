@@ -52,6 +52,7 @@ class ClasificacionRepositoryImpl(ClasificacionRepository):
         return ClasificacionResiduo(
             id=model.id,
             nombre=model.nombre,
+            estado=model.estado,
             created_at=model.created_at,
             updated_at=model.updated_at
         )
