@@ -71,3 +71,19 @@ class UsuarioRepositoryImpl(UsuarioRepository):
         if usuario_model:
             return self._to_entity(usuario_model)
         return None
+    
+    async def listar_con_roles(self) -> List[dict]:
+        query = text("""
+            SELECT 
+                u.id, 
+                u.nombre, 
+                u.correo, 
+                r.nombre AS nombre_rol,
+                u.estado, 
+                u.created_at
+            FROM usuario u
+            JOIN rol r ON u.id_rol = r.id
+        """)
+        result = await self.session.execute(query)
+        rows = result.fetchall()
+        return [dict(row._mapping) for row in rows]  # convierte Row en dicts

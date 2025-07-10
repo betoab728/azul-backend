@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from typing import Optional
 from app.domain.entities.usuario import Usuario
+from typing import List
 
 class UsuarioRepository(ABC):
     @abstractmethod
@@ -22,4 +23,9 @@ class UsuarioRepository(ABC):
  
     @abstractmethod
     async def obtener_por_nombre(self, nombre: str) -> Optional[Usuario]:
+        pass
+    
+    @abstractmethod
+    async def listar_con_roles(self) -> List[dict]:
+        """Retorna usuarios junto con su rol (nombre del rol)"""
         pass
