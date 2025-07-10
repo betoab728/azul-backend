@@ -12,3 +12,11 @@ class RolReadDto(BaseModel):
     descripcion: str
     created_at: datetime
     updated_at: datetime
+
+class UsuarioConRolDto(BaseModel):
+    id: UUID
+    nombre: str
+    correo: str
+    nombre_rol: str
+    estado: int
+    created_at: datetime

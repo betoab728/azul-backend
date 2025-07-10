@@ -9,8 +9,13 @@ from app.domain.entities.rol import Rol
 from app.dependencies import get_crear_rol_use_case, get_listar_roles_use_case
 from sqlmodel.ext.asyncio.session import AsyncSession
 from pydantic import BaseModel
+from app.api.auth import get_current_user
 
-router = APIRouter(prefix="/roles", tags=["Roles"])
+router = APIRouter(
+    prefix="/roles", 
+    tags=["Roles"],
+   dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
+    )
 
 @router.post("/", response_model=RolReadDto)
 async def crear_rol(

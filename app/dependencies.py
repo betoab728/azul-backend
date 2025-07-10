@@ -90,3 +90,9 @@ def get_listar_tipos_residuo_use_case(
 ) -> ListarTiposResiduoUseCase:
     return ListarTiposResiduoUseCase(repo)
       
+#listar usuarios con rol
+from app.use_cases.usuario.listar_usuarios_con_rol_usecase import ListarUsuariosConRolUseCase
+async def get_listar_usuarios_con_rol_use_case() -> ListarUsuariosConRolUseCase:
+    async with async_session() as session:
+        repository = UsuarioRepositoryImpl(session)
+        return ListarUsuariosConRolUseCase(repository)

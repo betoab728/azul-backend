@@ -10,12 +10,15 @@ from app.api.auth import get_current_user
 from app.use_cases.usuario.crear_usuario_usecase import CrearUsuarioUseCase
 from app.use_cases.usuario.listar_usuarios_usecase import ListarUsuariosUseCase
 from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
+from app.use_cases.usuario.listar_usuarios_con_rol_usecase import ListarUsuariosConRolUseCase
 #dependencias
-from app.dependencies import get_crear_usuario_use_case, get_listar_usuarios_use_case, get_login_usuario_use_case
+from app.dependencies import get_crear_usuario_use_case, get_listar_usuarios_use_case, get_login_usuario_use_case,
+get_listar_usuarios_con_rol_use_case
 from sqlmodel.ext.asyncio.session import AsyncSession
 from pydantic import BaseModel
 #dtos
-from app.api.dtos.usuario_dto import UsuarioCreateDto, UsuarioReadDto, UsuarioLoginDto, TokenDto
+from app.api.dtos.usuario_dto import UsuarioCreateDto, UsuarioReadDto, UsuarioLoginDto, TokenDto,UsuarioConRolDto
+
 
 router = APIRouter(
     prefix="/usuarios", 
@@ -45,4 +48,10 @@ async def listar_usuarios(
 ):
     usuarios = await use_case.execute()
     return [UsuarioReadDto(**u.__dict__) for u in usuarios]
+
+@router.get("/con-rol", response_model=List[UsuarioConRolDto])
+async def listar_usuarios_con_rol(
+    use_case: ListarUsuariosConRolUseCase = Depends(get_listar_usuarios_con_rol_use_case)
+):
+    return await use_case.execute()
 
