@@ -12,8 +12,7 @@ from app.use_cases.usuario.listar_usuarios_usecase import ListarUsuariosUseCase
 from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
 from app.use_cases.usuario.listar_usuarios_con_rol_usecase import ListarUsuariosConRolUseCase
 #dependencias
-from app.dependencies import get_crear_usuario_use_case, get_listar_usuarios_use_case, get_login_usuario_use_case,
-get_listar_usuarios_con_rol_use_case
+from app.dependencies import get_crear_usuario_use_case, get_listar_usuarios_use_case, get_login_usuario_use_case, get_listar_usuarios_con_rol_use_case
 from sqlmodel.ext.asyncio.session import AsyncSession
 from pydantic import BaseModel
 #dtos

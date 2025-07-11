@@ -1,5 +1,5 @@
-from domain.interfaces.usuario_repository import UsuarioRepository
-from api.dtos.usuario_dto import UsuarioConRolDto
+from app.domain.interfaces.usuario_repository import UsuarioRepository
+from app.api.dtos.usuario_dto import UsuarioConRolDto
 
 class ListarUsuariosConRolUseCase:
     def __init__(self, repository: UsuarioRepository):

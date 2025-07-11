@@ -6,6 +6,7 @@ from app.domain.entities.usuario import Usuario as UsuarioEntity
 from app.domain.interfaces.usuario_repository import UsuarioRepository
 from app.infrastructure.db.models.usuario import Usuario as UsuarioModel
 from datetime import datetime
+from sqlalchemy import text
 
 class UsuarioRepositoryImpl(UsuarioRepository):
     def __init__(self, session: AsyncSession):

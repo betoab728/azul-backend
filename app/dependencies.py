@@ -46,11 +46,18 @@ def get_crear_usuario_use_case(
 ) -> CrearUsuarioUseCase:
     return CrearUsuarioUseCase(repo)
 
-# Inyectar caso de uso - Listar Usuarios
+#  caso de uso - Listar Usuarios
 def get_listar_usuarios_use_case(
     repo: UsuarioRepository = Depends(get_usuario_repository)
 ) -> ListarUsuariosUseCase:
     return ListarUsuariosUseCase(repo)
+          
+#listar usuarios con rol
+from app.use_cases.usuario.listar_usuarios_con_rol_usecase import ListarUsuariosConRolUseCase
+def get_listar_usuarios_con_rol_use_case(
+    repo: UsuarioRepository = Depends(get_usuario_repository)
+) -> ListarUsuariosConRolUseCase:
+    return ListarUsuariosConRolUseCase(repo)
 
 def get_login_usuario_use_case(
     repo: UsuarioRepository = Depends(get_usuario_repository)
@@ -89,10 +96,3 @@ def get_listar_tipos_residuo_use_case(
     repo: TipoResiduoRepository = Depends(get_tipo_residuo_repository)
 ) -> ListarTiposResiduoUseCase:
     return ListarTiposResiduoUseCase(repo)
-      
-#listar usuarios con rol
-from app.use_cases.usuario.listar_usuarios_con_rol_usecase import ListarUsuariosConRolUseCase
-async def get_listar_usuarios_con_rol_use_case() -> ListarUsuariosConRolUseCase:
-    async with async_session() as session:
-        repository = UsuarioRepositoryImpl(session)
-        return ListarUsuariosConRolUseCase(repository)

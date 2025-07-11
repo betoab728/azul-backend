@@ -29,3 +29,11 @@ class UsuarioLoginDto(BaseModel):
 class TokenDto(BaseModel):
     access_token: str
     token_type: str
+
+class UsuarioConRolDto(BaseModel):
+    id: UUID
+    nombre: str
+    correo: str
+    nombre_rol: str
+    estado: int
+    created_at: datetime
