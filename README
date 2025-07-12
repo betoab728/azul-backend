@@ -22,3 +22,13 @@ app/
 
 #resolucion de erroes 
 #1. no sale el endpoint de clasificacion , la solucion es importar el router en main.py
+
+#Para ejecutar correctamente primero activar el entorno virtual: python -m venv venv
+# y luego activar el entorno virtual: 
+# Windows: venv\Scripts\activate
+# Linux/Mac: source venv/bin/activate
+# instala los paquetes del proyecto con con pip install -r requirements.txt
+# y luego levanta el servidor con el comando:
+# uvicorn main:app --reload
+# si no encuentra el archivo requirements.txt o no tiene permisos 
+#prueba navegando a la carpeta, instala desde cmd como administrador, puede ser necesario usar ruta absoluta
