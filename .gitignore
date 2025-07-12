@@ -2,3 +2,4 @@
 # Ignorar archivos de configuración de IDE
 
 .env
+venv/
