@@ -96,3 +96,19 @@ def get_listar_tipos_residuo_use_case(
     repo: TipoResiduoRepository = Depends(get_tipo_residuo_repository)
 ) -> ListarTiposResiduoUseCase:
     return ListarTiposResiduoUseCase(repo)
+
+#unidad medida
+from app.infrastructure.repositories.unidad_medida_repository_impl import UnidadMedidaRepositoryImpl
+from app.domain.interfaces.unidad_medida_repository import UnidadMedidaRepository
+from app.use_cases.unidad_medida.crear_unidad_usecase import CrearUnidadUseCase
+from app.use_cases.unidad_medida.listar_unidad_usecase import ListarUnidadesUseCase
+def get_unidad_medida_repository(db: AsyncSession = Depends(get_db)) -> UnidadMedidaRepository:
+    return UnidadMedidaRepositoryImpl(db)
+def get_crear_unidad_use_case(
+    repo: UnidadMedidaRepository = Depends(get_unidad_medida_repository)
+) -> CrearUnidadUseCase:
+    return CrearUnidadUseCase(repo)
+def get_listar_unidades_use_case(
+    repo: UnidadMedidaRepository = Depends(get_unidad_medida_repository)
+) -> ListarUnidadesUseCase:
+    return ListarUnidadesUseCase(repo)
