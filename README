@@ -16,6 +16,8 @@ app/
 │   │   └── models/
 │   │   └── database.py      
 │   └─── repositories/    # implementación de los repositorios o interfaces      
+├── dependencies/  # dependencias de la aplicación
+│   └── tipo_residuo_dependencies.py 
 ├── services/            
 ├── use_cases/    # casos de uso de la aplicación                     
 └── main.py               # Punto de entrada de FastAPI

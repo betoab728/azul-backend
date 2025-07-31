@@ -8,13 +8,25 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import delete, update
 from sqlalchemy.orm import selectinload
+from sqlalchemy import text
+
+
+from uuid import UUID
+from typing import Optional, List
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy import text
+from app.infrastructure.db.models.tipo_residuo import TipoResiduo as TipoResiduoModel
+from app.domain.entities.tipo_residuo import TipoResiduo as TipoResiduoEntity
+from app.domain.interfaces.tipo_residuo_repository import TipoResiduoRepository
+from datetime import datetime
 
 class TipoResiduoRepositoryImpl(TipoResiduoRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def create(self, tipo_residuo: DomainTipoResiduo) -> DomainTipoResiduo:
-        db_tipo_residuo = TipoResiduo(
+    async def create(self, tipo_residuo: TipoResiduoEntity) -> TipoResiduoEntity:
+        db_tipo = TipoResiduoModel(
             id=tipo_residuo.id,
             nombre=tipo_residuo.nombre,
             descripcion=tipo_residuo.descripcion,
@@ -22,41 +34,56 @@ class TipoResiduoRepositoryImpl(TipoResiduoRepository):
             created_at=tipo_residuo.created_at,
             updated_at=tipo_residuo.updated_at
         )
-        self.session.add(db_tipo_residuo)
+        self.session.add(db_tipo)
         await self.session.commit()
-        await self.session.refresh(db_tipo_residuo)
-        return self._to_entity(db_tipo_residuo)
+        await self.session.refresh(db_tipo)
+        return self._to_entity(db_tipo)
 
-    async def get_by_id(self, id: UUID) -> Optional[DomainTipoResiduo]:
-        result = await self.session.get(TipoResiduo, id)
+    async def get_by_id(self, id: UUID) -> Optional[TipoResiduoEntity]:
+        result = await self.session.get(TipoResiduoModel, id)
         return self._to_entity(result) if result else None
 
-    async def update(self, tipo_residuo: DomainTipoResiduo) -> DomainTipoResiduo:
-        db_tipo_residuo = await self.session.get(TipoResiduo, tipo_residuo.id)
-        if db_tipo_residuo:
+    async def update(self, tipo_residuo: TipoResiduoEntity) -> TipoResiduoEntity:
+        db_tipo = await self.session.get(TipoResiduoModel, tipo_residuo.id)
+        if db_tipo:
             for field, value in tipo_residuo.__dict__.items():
-                setattr(db_tipo_residuo, field, value)
-            self.session.add(db_tipo_residuo)
+                setattr(db_tipo, field, value)
+            self.session.add(db_tipo)
             await self.session.commit()
-            await self.session.refresh(db_tipo_residuo)
-        return self._to_entity(db_tipo_residuo)
+            await self.session.refresh(db_tipo)
+        return self._to_entity(db_tipo)
 
     async def delete(self, id: UUID) -> None:
-        db_tipo_residuo = await self.session.get(TipoResiduo, id)
-        if db_tipo_residuo:
-            await self.session.delete(db_tipo_residuo)
+        db_tipo = await self.session.get(TipoResiduoModel, id)
+        if db_tipo:
+            await self.session.delete(db_tipo)
             await self.session.commit()
 
-    async def obtener_todos(self) -> List[DomainTipoResiduo]:
-        result = await self.session.execute(select(TipoResiduo).options(selectinload(TipoResiduo.clasificacion)))
+    async def obtener_todos(self) -> List[TipoResiduoEntity]:
+        result = await self.session.execute(select(TipoResiduoModel))
         return [self._to_entity(row) for row in result.scalars().all()]
 
-    def _to_entity(self, model: TipoResiduo) -> DomainTipoResiduo:
-        return DomainTipoResiduo(
+    async def listar_con_clasificacion(self) -> List[dict]:
+        query = text("""
+            SELECT 
+                tr.id, 
+                tr.nombre, 
+                tr.descripcion, 
+                cr.nombre AS clasificacion, 
+                tr.created_at
+            FROM tipo_residuo tr
+            JOIN clasificacion_residuo cr ON tr.id_clasificacion = cr.id
+        """)
+        result = await self.session.execute(query)
+        rows = result.fetchall()
+        return [dict(row._mapping) for row in rows]
+
+    def _to_entity(self, model: TipoResiduoModel) -> TipoResiduoEntity:
+        return TipoResiduoEntity(
             id=model.id,
             nombre=model.nombre,
             descripcion=model.descripcion,
             id_clasificacion=model.id_clasificacion,
-            created_at=model.created_at,
-            updated_at=model.updated_at
+            created_at=model.created_at or datetime.utcnow(),
+            updated_at=model.updated_at or datetime.utcnow()
         )
