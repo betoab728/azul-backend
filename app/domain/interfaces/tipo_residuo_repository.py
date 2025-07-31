@@ -29,3 +29,8 @@ class TipoResiduoRepository(ABC):
     async def obtener_todos(self) -> List[TipoResiduo]:
         """Obtiene todos los tipos de residuos."""
         pass
+    
+    @abstractmethod
+    async def listar_con_clasificacion(self) -> List[dict]:
+        """Lista los tipos de residuos junto con su clasificación."""
+        pass
