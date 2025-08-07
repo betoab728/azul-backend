@@ -32,7 +32,8 @@ class TipoResiduoRepositoryImpl(TipoResiduoRepository):
             descripcion=tipo_residuo.descripcion,
             id_clasificacion=tipo_residuo.id_clasificacion,
             created_at=tipo_residuo.created_at,
-            updated_at=tipo_residuo.updated_at
+            updated_at=tipo_residuo.updated_at,
+            estado=tipo_residuo.estado
         )
         self.session.add(db_tipo)
         await self.session.commit()
@@ -70,7 +71,11 @@ class TipoResiduoRepositoryImpl(TipoResiduoRepository):
                 tr.nombre, 
                 tr.descripcion, 
                 cr.nombre AS clasificacion, 
-                tr.created_at
+                tr.created_at,
+                CASE 
+                    WHEN tr.estado = 1 THEN 'Activo'
+                     ELSE 'Inactivo'
+                END AS estado
             FROM tipo_residuo tr
             JOIN clasificacion_residuo cr ON tr.id_clasificacion = cr.id
         """)
@@ -85,5 +90,6 @@ class TipoResiduoRepositoryImpl(TipoResiduoRepository):
             descripcion=model.descripcion,
             id_clasificacion=model.id_clasificacion,
             created_at=model.created_at or datetime.utcnow(),
-            updated_at=model.updated_at or datetime.utcnow()
+            updated_at=model.updated_at or datetime.utcnow(),
+            estado=model.estado
         )
