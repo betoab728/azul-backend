@@ -12,3 +12,4 @@ class RegistroResiduo(SQLModel, table=True):
     observaciones: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    estado: int = Field(default=1, nullable=False)  # 1: Activo, 0: Inactivo

@@ -17,7 +17,9 @@ class TipoResiduoReadDto(BaseModel):
     id_clasificacion: UUID
     created_at: datetime
     updated_at: datetime
+    estado: str 
 
+    
     class Config:
         orm_mode = True
 
@@ -27,3 +29,4 @@ class TipoResiduoConClasificacionDto(BaseModel):
     descripcion: Optional[str] = None
     clasificacion: str
     created_at: datetime
+    estado: str

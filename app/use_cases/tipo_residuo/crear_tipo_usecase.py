@@ -17,7 +17,8 @@ class CrearTipoResiduoUseCase:
             descripcion=dto.descripcion,
             id_clasificacion=dto.id_clasificacion,
             created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
+            updated_at=datetime.utcnow(),
+            estado=1  # estado por defecto es activo 1
         )
         creado = await self.tipo_residuo_repository.create(nuevo)
     
@@ -27,5 +28,6 @@ class CrearTipoResiduoUseCase:
             descripcion=creado.descripcion,
             id_clasificacion=creado.id_clasificacion,
             created_at=creado.created_at,
-            updated_at=creado.updated_at
+            updated_at=creado.updated_at,
+            estado= 'Activo' if creado.estado == 1 else 'Inactivo'
         )

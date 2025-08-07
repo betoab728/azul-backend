@@ -10,5 +10,6 @@ class TipoResiduo(SQLModel, table=True):
     nombre: Optional[str] = Field(default=None, max_length=100)
     descripcion: Optional[str] = Field(default=None)
     id_clasificacion: UUID = Field(foreign_key="clasificacion_residuo.id")
+    estado: Optional[int] = Field(default=1, description="Estado del tipo de residuo (1: Activo, 0: Inactivo)")
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
