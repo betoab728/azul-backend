@@ -16,3 +16,4 @@ class GeneradorResiduo(SQLModel, table=True):
     correo: Optional[str] = Field(default=None, max_length=100)
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    estado: Optional[int] = Field(default=1, description="Estado del tipo de residuo (1: Activo, 0: Inactivo)")
