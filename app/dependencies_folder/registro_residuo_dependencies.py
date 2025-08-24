@@ -11,9 +11,6 @@ def get_registro_residuo_repository(
 ) -> RegistroResiduoRepository:
     return RegistroResiduoRepositoryImpl(db)
 
-
-
-
 def get_listar_registro_residuo_detallado_use_case(
     repo: RegistroResiduoRepository = Depends(get_registro_residuo_repository)
 ) -> ListarRegistroResiduosDetalladoUseCase:
