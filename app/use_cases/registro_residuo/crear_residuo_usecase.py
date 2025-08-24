@@ -1,7 +1,6 @@
 from uuid import uuid4
 from datetime import datetime
 from typing import Optional
-
 from app.domain.entities.registro_residuo import RegistroResiduo
 from app.domain.interfaces.registro_residuo_repository import RegistroResiduoRepository
 from app.api.dtos.registro_residuo_dto import RegistroResiduoCreateDto, RegistroResiduoReadDto

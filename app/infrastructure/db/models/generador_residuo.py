@@ -9,7 +9,7 @@ class GeneradorResiduo(SQLModel, table=True):
     ruc: str = Field(max_length=20, nullable=False)
     razon_social: Optional[str] = Field(default=None, max_length=100)
     direccion: Optional[str] = Field(default=None, max_length=150)
-    id_distrito: UUID = Field(foreign_key="distrito.id")
+    id_distrito: int = Field(foreign_key="distritos.id")
     dni_responsable: Optional[str] = Field(default=None, max_length=15)
     nombre_responsable: Optional[str] = Field(default=None, max_length=100)
     telefono: Optional[str] = Field(default=None, max_length=20)

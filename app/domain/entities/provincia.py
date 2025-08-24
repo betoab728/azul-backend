@@ -3,7 +3,7 @@ from typing import Optional
 from uuid import UUID
 
 class Provincia:
-    def __init__(self, id: UUID, nombre_provincia: str, iddepartamento: UUID,
+    def __init__(self, id: UUID, nombre_provincia: str, iddepartamento: int,
                  created_at: datetime, updated_at: datetime):
         self.id = id
         self.nombre_provincia = nombre_provincia
