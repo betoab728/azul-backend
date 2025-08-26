@@ -17,4 +17,4 @@ class GeneradorResiduo:
         self.correo = correo
         self.created_at = created_at
         self.updated_at = updated_at
-        self.estado = estado
+        self.estado = estado    
