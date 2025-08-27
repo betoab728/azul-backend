@@ -12,6 +12,8 @@ class GeneradorResiduoCreateDto(BaseModel):
     nombre_responsable: Optional[str] = None
     telefono: Optional[str] = None
     correo: Optional[EmailStr] = None  # usa EmailStr para validar
+    latitud: Optional[float] = None
+    longitud: Optional[float] = None
 
 class GeneradorResiduoReadDto(BaseModel):
     id: UUID
@@ -25,6 +27,8 @@ class GeneradorResiduoReadDto(BaseModel):
     correo: Optional[str]
     created_at: datetime
     updated_at: datetime
+    latitud: Optional[float]
+    longitud: Optional[float]
     estado: int   # 1 = activo, 0 = inactivo
 
     class Config:
