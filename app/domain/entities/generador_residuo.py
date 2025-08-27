@@ -5,7 +5,8 @@ from uuid import UUID
 class GeneradorResiduo:
     def __init__(self, id: UUID, ruc: str, razon_social: Optional[str], direccion: Optional[str], id_distrito: int,
                  dni_responsable: Optional[str], nombre_responsable: Optional[str], telefono: Optional[str],
-                 correo: Optional[str], created_at: datetime, updated_at: datetime,estado: int = 1):
+                 correo: Optional[str], created_at: datetime, updated_at: datetime,estado: int = 1
+                 , latitud: Optional[float] = None, longitud: Optional[float] = None):
         self.id = id
         self.ruc = ruc
         self.razon_social = razon_social
@@ -18,3 +19,5 @@ class GeneradorResiduo:
         self.created_at = created_at
         self.updated_at = updated_at
         self.estado = estado    
+        self.latitud = latitud
+        self.longitud = longitud
