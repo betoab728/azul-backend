@@ -20,6 +20,8 @@ class CrearGeneradorResiduoUseCase:
             nombre_responsable=dto.nombre_responsable,
             telefono=dto.telefono,
             correo=dto.correo,
+            latitud=dto.latitud,
+            longitud=dto.longitud,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
             estado=1
@@ -37,6 +39,8 @@ class CrearGeneradorResiduoUseCase:
             nombre_responsable=creado.nombre_responsable,
             telefono=creado.telefono,
             correo=creado.correo,
+            latitud=creado.latitud,
+            longitud=creado.longitud,
             created_at=creado.created_at,
             updated_at=creado.updated_at,
             estado=creado.estado
