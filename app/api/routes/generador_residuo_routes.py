@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 # Crear nuevo generador de residuo
-@router.post("/", response_model=GeneradorResiduoReadDto)
+@router.post("", response_model=GeneradorResiduoReadDto)
 async def crear_generador_residuo(
     input_data: GeneradorResiduoCreateDto,
     use_case: CrearGeneradorResiduoUseCase = Depends(get_crear_generador_residuo_use_case)
@@ -28,7 +28,7 @@ async def crear_generador_residuo(
     return await use_case.execute(input_data)
 
 # Listar generadores de residuos con detalles 
-@router.get("/", response_model=List[GeneradorResiduoDetalleDto])
+@router.get("", response_model=List[GeneradorResiduoDetalleDto])
 async def listar_generadores_detallados(
     use_case: ListarGeneradoresResiduoUseCase = Depends(get_listar_generador_residuo_use_case)
 ):
