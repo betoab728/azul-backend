@@ -14,6 +14,13 @@ from app.api.routes.generador_residuo_routes import router as generador_residuo_
 from app.api.routes.ubigeo_routes import router as ubigeo_router
 
 from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200", "https://azul-backend-production.up.railway.app"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
@@ -28,11 +35,3 @@ app.include_router(registro_residuo_router)
 app.include_router(generador_residuo_router)
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:4200", "https://azul-backend-production.up.railway.app"]
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
