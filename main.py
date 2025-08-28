@@ -30,6 +30,7 @@ app.include_router(generador_residuo_router)
 
 app.add_middleware(
     CORSMiddleware,
+    allow_origins=["http://localhost:4200", "https://azul-backend-production.up.railway.app"]
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
