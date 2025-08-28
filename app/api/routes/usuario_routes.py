@@ -25,7 +25,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
 )
 
-@router.post("/", response_model=UsuarioReadDto)
+@router.post("", response_model=UsuarioReadDto)
 async def crear_usuario(
     usuario_in: UsuarioCreateDto,
     use_case: CrearUsuarioUseCase = Depends(get_crear_usuario_use_case)
@@ -41,7 +41,7 @@ async def crear_usuario(
         updated_at=usuario.updated_at,
     )
 
-@router.get("/", response_model=List[UsuarioReadDto])
+@router.get("", response_model=List[UsuarioReadDto])
 async def listar_usuarios(
     use_case: ListarUsuariosUseCase = Depends(get_listar_usuarios_use_case)
 ):

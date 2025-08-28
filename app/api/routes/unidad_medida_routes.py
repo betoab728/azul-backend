@@ -14,7 +14,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
 )
 
-@router.post("/", response_model=UnidadMedidaReadDto)
+@router.post("", response_model=UnidadMedidaReadDto)
 async def crear_unidad_medida(
     unidad_medida_dto: UnidadMedidaCreateDto,
     crear_unidad_use_case: CrearUnidadUseCase = Depends(get_crear_unidad_use_case)
@@ -30,7 +30,7 @@ async def crear_unidad_medida(
         traceback.print_exc()
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get("/", response_model=list[UnidadMedidaReadDto])
+@router.get("", response_model=list[UnidadMedidaReadDto])
 async def listar_unidades_medida(
     listar_unidades_use_case: ListarUnidadesUseCase = Depends(get_listar_unidades_use_case)
 ) -> list[UnidadMedidaReadDto]:

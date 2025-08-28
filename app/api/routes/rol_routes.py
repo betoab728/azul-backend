@@ -17,7 +17,7 @@ router = APIRouter(
    dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
     )
 
-@router.post("/", response_model=RolReadDto)
+@router.post("", response_model=RolReadDto)
 async def crear_rol(
     rol_in: RolCreateDto,
     use_case: CrearRolUseCase = Depends(get_crear_rol_use_case)
@@ -25,7 +25,7 @@ async def crear_rol(
     rol = await use_case.execute(rol_in.nombre, rol_in.descripcion)
     return RolReadDto(**rol.__dict__)
 
-@router.get("/", response_model=List[RolReadDto])
+@router.get("", response_model=List[RolReadDto])
 async def listar_roles(
     use_case: ListarRolesUseCase = Depends(get_listar_roles_use_case)
 ):

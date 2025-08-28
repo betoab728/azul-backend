@@ -14,7 +14,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
 )
 # Crear tipo de residuo
-@router.post("/", response_model=TipoResiduoReadDto)
+@router.post("", response_model=TipoResiduoReadDto)
 async def crear_tipo_residuo(
     tipo_residuo_in: TipoResiduoCreateDto,
     use_case: CrearTipoResiduoUseCase = Depends(get_crear_tipo_residuo_use_case)
@@ -22,7 +22,7 @@ async def crear_tipo_residuo(
     return await use_case.execute(tipo_residuo_in)
 
 # Listar tipos de residuos con clasificación
-@router.get("/", response_model=List[TipoResiduoConClasificacionDto])
+@router.get("", response_model=List[TipoResiduoConClasificacionDto])
 async def listar_tipos_residuos(
     use_case :ListarTiposResiduoConClasificacionUseCase = Depends(get_listar_tipos_con_clasificacion_use_case)
 ):

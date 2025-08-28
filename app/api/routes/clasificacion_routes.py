@@ -12,7 +12,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
 )
 #crear clasificacion de residuo
-@router.post("/", response_model=ClasificacionReadDto)
+@router.post("", response_model=ClasificacionReadDto)
 async def crear_clasificacion(
     clasificacion_in: ClasificacionCreateDto,
     use_case = Depends(get_crear_clasificacion_use_case)
@@ -26,7 +26,7 @@ async def crear_clasificacion(
         updated_at=clasificacion.updated_at
     )
 #listar clasificaciones de residuos
-@router.get("/", response_model=List[ClasificacionReadDto])
+@router.get("", response_model=List[ClasificacionReadDto])
 async def listar_clasificaciones(
     use_case = Depends(get_listar_clasificaciones_use_case)
 ):
