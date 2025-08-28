@@ -13,7 +13,14 @@ from app.api.routes.registro_residuo_routes import router as registro_residuo_ro
 from app.api.routes.generador_residuo_routes import router as generador_residuo_router
 from app.api.routes.ubigeo_routes import router as ubigeo_router
 
-
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
 app.include_router(ubigeo_router)
@@ -26,14 +33,7 @@ app.include_router(unidad_medida_router)
 app.include_router(registro_residuo_router)
 app.include_router(generador_residuo_router)
 
-from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
 
 
 
