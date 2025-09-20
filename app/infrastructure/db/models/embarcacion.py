@@ -15,3 +15,5 @@ class Embarcacion(SQLModel, table=True):
     observaciones: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    #relacion con generador_residuo
+    id_generador: UUID = Field(foreign_key="generador_residuo.id")  # FK
