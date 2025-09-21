@@ -21,7 +21,7 @@ app/
 ├── services/            
 ├── use_cases/    # casos de uso de la aplicación                     
 └── main.py               # Punto de entrada de FastAPI
-
+# ruta de implementacion modelo > entidad > interfaz > repositorio > caso de uso > ruta > dto
 #resolucion de erroes 
 #1. no sale el endpoint de clasificacion , la solucion es importar el router en main.py
 

@@ -9,6 +9,7 @@ class UsuarioCreateDto(BaseModel):
     correo: str
     clave: str
     id_rol: UUID
+    id_generador: UUID
 
 class UsuarioReadDto(BaseModel):
     id: UUID
