@@ -11,7 +11,7 @@ class Embarcacion(SQLModel, table=True):
     id_tipo_embarcacion: UUID = Field(foreign_key="tipo_embarcacion.id")
     capacidad_carga: Optional[float] = None
     capitan: Optional[str] = Field(default=None, max_length=100)
-    estado: Optional[str] = Field(default=None, max_length=20)
+    estado:int = Field(default=1, nullable=False)  # 1: Activo, 0: Inactivo
     observaciones: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)

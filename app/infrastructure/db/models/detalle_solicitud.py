@@ -1,3 +1,9 @@
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional
+from uuid import UUID, uuid4
+from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion
+
+
 class DetalleSolicitud(SQLModel, table=True):
     __tablename__ = "detalle_solicitud"
 

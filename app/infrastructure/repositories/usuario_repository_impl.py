@@ -27,6 +27,7 @@ class UsuarioRepositoryImpl(UsuarioRepository):
             correo=usuario.correo,
             clave=usuario.clave,
             id_rol=usuario.id_rol,
+            id_generador=usuario.id_generador,
             estado=usuario.estado,
             created_at=usuario.created_at,
             updated_at=usuario.updated_at,
@@ -59,6 +60,7 @@ class UsuarioRepositoryImpl(UsuarioRepository):
             correo=model.correo,
             clave=model.clave,
             id_rol=model.id_rol,
+            id_generador=model.id_generador,
             estado=model.estado,
             created_at=model.created_at or datetime.utcnow(),
             updated_at=model.updated_at or datetime.utcnow()
