@@ -65,7 +65,10 @@ class EmbarcacionRepositoryImpl(EmbarcacionRepository):
                 e.matricula,
                 e.capacidad_carga,
                 e.capitan,
-                e.estado,
+                CASE 
+                    WHEN e.estado = 1 THEN 'Activo'
+                    ELSE 'Inactivo'
+                END AS estado,
                 e.observaciones,
                 e.created_at,
                 e.updated_at,
