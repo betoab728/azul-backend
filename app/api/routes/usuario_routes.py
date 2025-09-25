@@ -30,12 +30,14 @@ async def crear_usuario(
     usuario_in: UsuarioCreateDto,
     use_case: CrearUsuarioUseCase = Depends(get_crear_usuario_use_case)
 ):
-    usuario = await use_case.execute(usuario_in.nombre, usuario_in.correo, usuario_in.clave, usuario_in.id_rol)
+    usuario = await use_case.execute(usuario_in.nombre, usuario_in.correo, usuario_in.clave,
+     usuario_in.id_rol,usuario_in.id_generador)
     return UsuarioReadDto(
          id=usuario.id,
         nombre=usuario.nombre,
         correo=usuario.correo,
         id_rol=usuario.id_rol,
+        id_generador=usuario.id_generador,
         estado=usuario.estado,
         created_at=usuario.created_at,
         updated_at=usuario.updated_at,

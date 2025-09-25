@@ -3,6 +3,7 @@ from typing import List,Optional
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
 from app.domain.entities.usuario import Usuario as UsuarioEntity
+from app.api.dtos.usuario_dto import UsuarioLoginResultDto
 from app.domain.interfaces.usuario_repository import UsuarioRepository
 from app.infrastructure.db.models.usuario import Usuario as UsuarioModel
 from datetime import datetime
@@ -90,3 +91,24 @@ class UsuarioRepositoryImpl(UsuarioRepository):
         result = await self.session.execute(query)
         rows = result.fetchall()
         return [dict(row._mapping) for row in rows]  # convierte Row en dicts
+    
+    async def obtener_usuario_con_generador(self, nombre: str) -> Optional[UsuarioLoginResultDto]:
+        query = text("""
+            SELECT 
+                u.id as id,
+                u.nombre as nombre,
+                u.correo as correo,
+                u.id_generador as id_generador,
+                g.ruc as ruc,
+                g.razon_social as razon_social,
+                u.clave as clave
+            FROM usuario u
+            JOIN generador_residuo g ON g.id = u.id_generador
+            WHERE u.nombre = :nombre
+        """)
+        result = await self.session.execute(query, {"nombre": nombre})
+        row = result.first()
+        if row:
+            data = dict(row._mapping)
+            return UsuarioLoginResultDto(**data)
+        return None

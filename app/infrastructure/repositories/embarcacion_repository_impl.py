@@ -8,6 +8,7 @@ from sqlalchemy import text
 from app.domain.entities.embarcacion import Embarcacion as EmbarcacionEntity
 from app.infrastructure.db.models.embarcacion import Embarcacion as EmbarcacionModel
 from app.domain.interfaces.embarcacion_repository import EmbarcacionRepository
+from app.api.dtos.embarcacion_dto import EmbarcacionDetalleDto
 
 
 class EmbarcacionRepositoryImpl(EmbarcacionRepository):
@@ -81,6 +82,32 @@ class EmbarcacionRepositoryImpl(EmbarcacionRepository):
         result = await self.session.execute(query)
         rows = result.fetchall()
         return [dict(row._mapping) for row in rows]
+
+    async def listar_por_generador(self, id_generador: UUID) -> List[EmbarcacionDetalleDto]:
+        query = text("""
+            SELECT 
+                e.id,
+                e.nombre,
+                e.matricula,
+                e.capacidad_carga,
+                e.capitan,
+                CASE 
+                    WHEN e.estado = 1 THEN 'Activo'
+                    ELSE 'Inactivo'
+                END AS estado,
+                e.observaciones,
+                e.created_at,
+                e.updated_at,
+                gr.razon_social AS generador,
+                te.nombre AS tipo_embarcacion
+            FROM embarcacion e
+            JOIN generador_residuo gr ON e.id_generador = gr.id
+            JOIN tipo_embarcacion te ON e.id_tipo_embarcacion = te.id
+            WHERE e.id_generador = :id_generador
+        """)
+        result = await self.session.execute(query, {"id_generador": str(id_generador)})
+        rows = result.fetchall()
+        return [EmbarcacionDetalleDto(**dict(row._mapping)) for row in rows]
 
     def _to_entity(self, model: EmbarcacionModel) -> EmbarcacionEntity:
         return EmbarcacionEntity(
