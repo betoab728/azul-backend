@@ -3,6 +3,7 @@
 from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
+from typing import Optional
 
 class UsuarioCreateDto(BaseModel):
     nombre: str
@@ -27,9 +28,6 @@ class UsuarioLoginDto(BaseModel):
     nombre: str
     clave: str
     
-class TokenDto(BaseModel):
-    access_token: str
-    token_type: str
 
 class UsuarioConRolDto(BaseModel):
     id: UUID
@@ -38,3 +36,29 @@ class UsuarioConRolDto(BaseModel):
     nombre_rol: str
     estado: int
     created_at: datetime
+
+class UsuarioLoginResultDto(BaseModel):
+    id: UUID
+    nombre: str
+    correo: str
+    id_generador: UUID
+    ruc: Optional[str]
+    razon_social: Optional[str]
+    clave: str  # Incluir la clave para verificación durante el login
+
+class UserLoginInfoDto(BaseModel):
+    id: UUID
+    nombre: str
+    correo: str
+    id_generador: UUID
+    ruc: Optional[str]
+    razon_social: Optional[str]
+
+class TokenDto(BaseModel):
+    access_token: str
+    token_type: str
+    user: UserLoginInfoDto
+
+class UsuarioToken(BaseModel):
+    id: UUID
+    id_generador: UUID

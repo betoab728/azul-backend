@@ -5,6 +5,7 @@ from app.infrastructure.repositories.embarcacion_repository_impl import Embarcac
 from app.domain.interfaces.embarcacion_repository import EmbarcacionRepository
 from app.use_cases.embarcacion.listar_embarcacion_usecase import ListarEmbarcacionesUseCase
 from app.use_cases.embarcacion.crear_embarcacion_usecase import CrearEmbarcacionUseCase
+from app.use_cases.embarcacion.listar_por_generador_usecase import ListarEmbarcacionesPorGeneradorUseCase
 
 
 # Repositorio
@@ -26,3 +27,9 @@ def get_crear_embarcacion_use_case(
     repo: EmbarcacionRepository = Depends(get_embarcacion_repository)
 ) -> CrearEmbarcacionUseCase:
     return CrearEmbarcacionUseCase(repo)
+
+#listar por generador
+def get_listar_por_generador_use_case(
+    repo: EmbarcacionRepository = Depends(get_embarcacion_repository)
+) -> ListarEmbarcacionesPorGeneradorUseCase:
+    return ListarEmbarcacionesPorGeneradorUseCase(repo)

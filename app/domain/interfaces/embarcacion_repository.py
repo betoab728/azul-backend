@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from typing import Optional, List
 from app.domain.entities.embarcacion import Embarcacion
+from app.api.dtos.embarcacion_dto import EmbarcacionDetalleDto
 
 class EmbarcacionRepository(ABC):
     @abstractmethod
@@ -42,3 +43,9 @@ class EmbarcacionRepository(ABC):
         - Tipo de embarcación
         """
         pass
+    
+    @abstractmethod
+    async def listar_por_generador(self, id_generador: UUID) -> List[EmbarcacionDetalleDto]:
+        """Lista las embarcaciones asociadas a un generador específico."""
+        pass
+

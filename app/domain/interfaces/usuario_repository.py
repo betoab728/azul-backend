@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from typing import Optional
 from app.domain.entities.usuario import Usuario
+from app.api.dtos.usuario_dto import UsuarioLoginResultDto
 from typing import List
 
 class UsuarioRepository(ABC):
@@ -28,4 +29,9 @@ class UsuarioRepository(ABC):
     @abstractmethod
     async def listar_con_roles(self) -> List[dict]:
         """Retorna usuarios junto con su rol (nombre del rol)"""
+        pass
+    
+    @abstractmethod
+    async def obtener_usuario_con_generador(self, nombre: str) -> Optional[UsuarioLoginResultDto]:
+        """Retorna usuarios asociados a un generador específico"""
         pass

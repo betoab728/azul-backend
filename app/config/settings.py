@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     postgres_user: str = os.getenv("POSTGRES_USER")
     postgres_password: str = os.getenv("POSTGRES_PASSWORD")
     postgres_db: str = os.getenv("POSTGRES_DB")
+    secret_key: str = os.getenv("SECRET_KEY")
 
     environment: str = os.getenv("ENVIRONMENT")
 
