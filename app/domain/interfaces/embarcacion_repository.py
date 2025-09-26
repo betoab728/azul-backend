@@ -48,4 +48,4 @@ class EmbarcacionRepository(ABC):
     async def listar_por_generador(self, id_generador: UUID) -> List[EmbarcacionDetalleDto]:
         """Lista las embarcaciones asociadas a un generador específico."""
         pass
-
+    

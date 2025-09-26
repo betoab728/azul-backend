@@ -2,15 +2,8 @@
 from app.domain.interfaces.tipo_residuo_repository import TipoResiduoRepository
 from app.infrastructure.db.models.tipo_residuo import TipoResiduo
 from app.domain.entities.tipo_residuo import TipoResiduo as DomainTipoResiduo
-from uuid import UUID
-from typing import Optional, List
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 from sqlalchemy import delete, update
 from sqlalchemy.orm import selectinload
-from sqlalchemy import text
-
-
 from uuid import UUID
 from typing import Optional, List
 from sqlalchemy.ext.asyncio import AsyncSession
