@@ -8,7 +8,7 @@ class SolicitudCotizacion(SQLModel, table=True):
     __tablename__ = "solicitud_cotizacion"
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
-    fecha_solicitud: date
+    fecha: date
     id_puerto: UUID = Field(foreign_key="puerto.id")
     id_estado_solicitud: UUID = Field(foreign_key="estado_solicitud.id")
     observaciones: Optional[str] = None

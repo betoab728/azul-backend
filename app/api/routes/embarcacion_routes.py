@@ -44,3 +44,5 @@ async def listar_mis_embarcaciones(
     use_case: ListarEmbarcacionesPorGeneradorUseCase = Depends(get_listar_por_generador_use_case)
 ):
     return await use_case.execute(current_user.id_generador)
+
+# Listar tipos de embarcaciones
