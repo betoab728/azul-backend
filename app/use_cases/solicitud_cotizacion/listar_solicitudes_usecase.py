@@ -1,23 +1,22 @@
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
-from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionReadDto
+from app.api.dtos.solicitud_cotizacion_dto import SolicitudConDatosReadDto
 
 class ListarSolicitudesUseCase:
     def __init__(self, solicitud_repository: SolicitudRepository):
         self.solicitud_repository = solicitud_repository
 
-    async def execute(self) -> list[SolicitudCotizacionReadDto]:
+    async def execute(self) -> list[SolicitudConDatosReadDto]:
         solicitudes = await self.solicitud_repository.get_all()
         return [
-            SolicitudCotizacionReadDto(
+            SolicitudConDatosReadDto(
                 id=s.id,
                 fecha=s.fecha,
-                id_puerto=s.id_puerto,
-                id_estado_solicitud=s.id_estado_solicitud,
+                hora=s.hora,
                 observaciones=s.observaciones,
-                id_embarcacion=s.id_embarcacion,
-                created_at=s.created_at,
-                updated_at=s.updated_at,
-                detalles=[]
+                puerto=s.puerto,
+                estado_solicitud=s.estado_solicitud,
+                embarcacion=s.embarcacion,
+                generador=s.generador,
             )
             for s in solicitudes
         ]

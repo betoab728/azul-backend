@@ -8,12 +8,15 @@ from sqlalchemy import update
 
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion as SolicitudEntity
+from app.domain.entities.solicitud_cotizacion import SolicitudCotizacionConDatos
 from app.domain.entities.detalle_solicitud import DetalleSolicitud as DetalleEntity
 from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion as SolicitudModel
 from app.infrastructure.db.models.solicitud_cotizacion import DetalleSolicitud as DetalleModel
 from app.infrastructure.db.models.embarcacion import Embarcacion as EmbarcacionModel
-
-
+from app.infrastructure.db.models.puerto import Puerto as PuertoModel
+from app.infrastructure.db.models.estado_solicitud import EstadoSolicitud as EstadoSolicitudModel
+from app.infrastructure.db.models.generador_residuo import GeneradorResiduo as GeneradorResiduoModel
+from sqlalchemy import func
 
 class SolicitudRepositoryImpl(SolicitudRepository):
     def __init__(self, session: AsyncSession):
@@ -48,40 +51,127 @@ class SolicitudRepositoryImpl(SolicitudRepository):
         return self._to_entity(db_solicitud)
 
     # ---------- GET BY ID ----------
-    async def get_by_id(self, id: UUID) -> Optional[SolicitudEntity]:
+    async def get_by_id(self, id: UUID) -> SolicitudCotizacionConDatos | None:
         result = await self.session.execute(
-            select(SolicitudModel).where(SolicitudModel.id == id)
+            select(
+                SolicitudModel.id,
+                SolicitudModel.fecha,
+                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                SolicitudModel.observaciones,
+                PuertoModel.nombre.label("puerto"),
+                EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                EmbarcacionModel.nombre.label("embarcacion"),
+                GeneradorResiduoModel.razon_social.label("generador"),
+                SolicitudModel.created_at,
+                SolicitudModel.updated_at,
+            )
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
+            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .where(SolicitudModel.id == id)  
         )
-        db_solicitud = result.scalars().first()
-        return self._to_entity(db_solicitud) if db_solicitud else None
-
+        row = result.first()
+        return self._row_to_con_datos(row) if row else None
+    
     # ---------- LISTAR TODOS ----------
-    async def get_all(self) -> List[SolicitudEntity]:
-        result = await self.session.execute(select(SolicitudModel))
-        return [self._to_entity(row) for row in result.scalars().all()]
+    async def get_all(self) -> List[SolicitudCotizacionConDatos]:
+        result = await self.session.execute(
+            select(
+                SolicitudModel.id,
+                SolicitudModel.fecha,
+                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                SolicitudModel.observaciones,
+                PuertoModel.nombre.label("puerto"),
+                EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                EmbarcacionModel.nombre.label("embarcacion"),
+                GeneradorResiduoModel.razon_social.label("generador"),
+                SolicitudModel.created_at,
+                SolicitudModel.updated_at,
+            )
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
+            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+        )
+        rows = result.all()
+        return [self._row_to_con_datos(row) for row in rows]
 
     # ---------- LISTAR POR PUERTO ----------
-    async def get_by_puerto(self, id_puerto: UUID) -> List[SolicitudEntity]:
+    async def get_by_puerto(self, id_puerto: UUID) -> List[SolicitudCotizacionConDatos]:
         result = await self.session.execute(
-            select(SolicitudModel).where(SolicitudModel.id_puerto == id_puerto)
+            select(
+                SolicitudModel.id,
+                SolicitudModel.fecha,
+                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                SolicitudModel.observaciones,
+                PuertoModel.nombre.label("puerto"),
+                EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                EmbarcacionModel.nombre.label("embarcacion"),
+                GeneradorResiduoModel.razon_social.label("generador"),
+                SolicitudModel.created_at,
+                SolicitudModel.updated_at,
+            )
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
+            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .where(SolicitudModel.id_puerto == id_puerto)
         )
-        return [self._to_entity(row) for row in result.scalars().all()]
+
+        rows = result.all()
+        return [self._row_to_con_datos(row) for row in rows]   
+
 
     # ---------- LISTAR POR EMBARCACIÓN ----------
-    async def get_by_embarcacion(self, id_embarcacion: UUID) -> List[SolicitudEntity]:
+    async def get_by_embarcacion(self, id_embarcacion: UUID) -> List[SolicitudCotizacionConDatos]:
         result = await self.session.execute(
-            select(SolicitudModel).where(SolicitudModel.id_embarcacion == id_embarcacion)
+            select(
+                SolicitudModel.id,
+                SolicitudModel.fecha,
+                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                SolicitudModel.observaciones,
+                PuertoModel.nombre.label("puerto"),
+                EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                EmbarcacionModel.nombre.label("embarcacion"),
+                GeneradorResiduoModel.razon_social.label("generador"),
+                SolicitudModel.created_at,
+                SolicitudModel.updated_at,
+            )
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
+            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .where(EmbarcacionModel.id == id_embarcacion)
         )
-        return [self._to_entity(row) for row in result.scalars().all()]
+        rows = result.all()
+        return [self._row_to_con_datos(row) for row in rows]       
+
 
     # ---------- LISTAR POR GENERADOR ----------
-    async def get_by_generador(self, id_generador: UUID) -> List[SolicitudEntity]:
+    async def get_by_generador(self, id_generador: UUID) -> List[SolicitudCotizacionConDatos]:
         result = await self.session.execute(
-            select(SolicitudModel)
-            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
-            .where(EmbarcacionModel.id_generador == id_generador)
-        )
-        return [self._to_entity(row) for row in result.scalars().all()]
+            select(
+                    SolicitudModel.id,
+                    SolicitudModel.fecha,
+                    func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                    SolicitudModel.observaciones,
+                    PuertoModel.nombre.label("puerto"),
+                    EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                    EmbarcacionModel.nombre.label("embarcacion"),
+                    GeneradorResiduoModel.razon_social.label("generador"),
+                    SolicitudModel.created_at,
+                    SolicitudModel.updated_at,
+                )
+                .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+                .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+                .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
+                .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+                .where(GeneradorResiduoModel.id == id_generador)
+            )
+        rows = result.all()
+        return [self._row_to_con_datos(row) for row in rows]
+            
 
     # ---------- UPDATE ESTADO ----------
     async def update_estado(self, id_solicitud: UUID, nuevo_estado: UUID) -> Optional[SolicitudEntity]:
@@ -115,3 +205,18 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             updated_at=model.updated_at,
             id_embarcacion=model.id_embarcacion
         )
+
+    def _row_to_con_datos(self, row) -> SolicitudCotizacionConDatos:
+        return SolicitudCotizacionConDatos(
+            id=row.id,
+            fecha=row.fecha,
+            hora=row.hora,
+            observaciones=row.observaciones,
+            puerto=row.puerto,
+            estado_solicitud=row.estado_solicitud,
+            embarcacion=row.embarcacion,
+            generador=row.generador,
+            created_at=row.created_at,
+            updated_at=row.updated_at,
+        )
+
