@@ -33,4 +33,43 @@ class DetalleSolicitud:
         self.id_solicitud = id_solicitud
         self.id_residuo = id_residuo
         self.cantidad = cantidad 
-    
+        
+# Entidades con datos relacionados para respuestas enriquecidas
+class SolicitudCotizacionConDatos:
+    def __init__(
+        self,
+        id: UUID,
+        fecha: date,
+        hora: str,
+        puerto: str,
+        estado_solicitud: str,
+        observaciones: Optional[str],
+        created_at: datetime,
+        updated_at: datetime,
+        embarcacion: str,
+        generador: str
+    ):
+        self.id = id
+        self.fecha = fecha
+        self.hora = hora
+        self.puerto = puerto
+        self.estado_solicitud = estado_solicitud
+        self.observaciones = observaciones
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self.embarcacion = embarcacion
+        self.generador = generador
+
+
+class DetalleSolicitudConDatos:
+    def __init__(
+        self,
+        id: UUID,
+        id_solicitud: UUID,
+        residuo: str,
+        cantidad: Decimal
+    ):
+        self.id = id
+        self.id_solicitud = id_solicitud
+        self.residuo = residuo
+        self.cantidad = cantidad

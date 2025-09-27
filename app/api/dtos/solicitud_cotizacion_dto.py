@@ -3,6 +3,7 @@ from uuid import UUID
 from datetime import date
 from pydantic import BaseModel
 from datetime import datetime
+from pydantic import field_serializer
 
 
 class DetalleSolicitudCreateDto(BaseModel):
@@ -51,6 +52,33 @@ class SolicitudCotizacionDetalleDto(BaseModel):
 
     # 👇 detalles incluidos
     detalles: List[DetalleSolicitudReadDto]
+
+    class Config:
+        orm_mode = True
+
+
+# Entidades con datos relacionados para respuestas enriquecidas
+class DetalleSolicitudConDatosReadDto(BaseModel):
+    id: UUID
+    residuo: str
+    cantidad: float
+    class Config:
+        orm_mode = True
+
+
+class SolicitudConDatosReadDto(BaseModel):
+    id: UUID
+    fecha: date
+    hora: str
+    observaciones: Optional[str]
+    puerto: str
+    estado_solicitud: str
+    embarcacion: str
+    generador: str
+
+    @field_serializer("fecha")
+    def serialize_fecha(self, value: date) -> str:
+        return value.strftime("%d/%m/%Y")
 
     class Config:
         orm_mode = True
