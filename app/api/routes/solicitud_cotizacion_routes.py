@@ -24,6 +24,7 @@ from app.use_cases.solicitud_cotizacion.listar_por_generador_usecase import List
 from app.use_cases.solicitud_cotizacion.listar_por_puerto_usecase import ListarPorPuertoUseCase
 from app.use_cases.solicitud_cotizacion.listar_por_id_usecase import ListarPorIdUseCase
 from app.use_cases.solicitud_cotizacion.actualizar_estado_usecase import ActualizarEstadoUseCase    
+from app.api.dtos.usuario_dto import UsuarioToken
 
 router = APIRouter(
     prefix="/solicitudes",
@@ -61,12 +62,12 @@ async def listar_por_embarcacion(
 
 
 # Listar solicitudes por generador
-@router.get("/generador/{id_generador}", response_model=list[SolicitudConDatosReadDto])
+@router.get("/generador", response_model=list[SolicitudConDatosReadDto])
 async def listar_por_generador(
-    id_generador: UUID,
+    current_user: UsuarioToken = Depends(get_current_user),
     use_case: ListarPorGeneradorUseCase = Depends(get_listar_por_generador_use_case)
 ):
-    return await use_case.execute(id_generador)
+    return await use_case.execute(current_user.id_generador)
 
 
 # Listar solicitudes por puerto
