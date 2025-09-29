@@ -82,3 +82,9 @@ class SolicitudConDatosReadDto(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class DetalleSolicitudReadDto(BaseModel):
+    residuo: str
+    cantidad: float
+    unidad: str

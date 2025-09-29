@@ -185,8 +185,8 @@ class SolicitudRepositoryImpl(SolicitudRepository):
         db_solicitud.id_estado_solicitud = nuevo_estado
         db_solicitud.updated_at = datetime.utcnow()
 
-        async with self.session.begin():
-            self.session.add(db_solicitud)
+        self.session.add(db_solicitud)
+        await self.session.commit()    
 
         await self.session.refresh(db_solicitud)
         return self._to_entity(db_solicitud)

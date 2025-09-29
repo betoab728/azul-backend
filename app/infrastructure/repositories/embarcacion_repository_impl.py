@@ -4,7 +4,6 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import text
-
 from app.domain.entities.embarcacion import Embarcacion as EmbarcacionEntity
 from app.infrastructure.db.models.embarcacion import Embarcacion as EmbarcacionModel
 from app.domain.interfaces.embarcacion_repository import EmbarcacionRepository
