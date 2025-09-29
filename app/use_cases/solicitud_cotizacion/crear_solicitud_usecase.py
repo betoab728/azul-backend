@@ -11,7 +11,7 @@ class CrearSolicitudUseCase:
         self.solicitud_repository = solicitud_repository
 
     async def execute(self, dto: SolicitudCotizacionCreateDto) -> SolicitudCotizacionReadDto:
-        # 1. Construir entidad de dominio (cabecera)
+        # 1 Construir entidad de dominio (cabecera)
         solicitud = SolicitudCotizacion(
             id=uuid4(),
             fecha=dto.fecha,
@@ -23,7 +23,7 @@ class CrearSolicitudUseCase:
             id_embarcacion=dto.id_embarcacion
         )
 
-        # 2. Construir entidades detalle
+        # 2Construir entidades detalle
         detalles = [
             DetalleSolicitud(
                 id=uuid4(),
@@ -34,10 +34,10 @@ class CrearSolicitudUseCase:
             for item in dto.detalles
         ]
 
-        # 3. Persistir usando repositorio
+        # 3Persistir usando repositorio
         creada = await self.solicitud_repository.create(solicitud, detalles)
 
-        # 4. Armar respuesta DTO
+        # 4 Armar respuesta DTO
         return SolicitudCotizacionReadDto(
             id=creada.id,
             fecha=creada.fecha,
@@ -53,6 +53,6 @@ class CrearSolicitudUseCase:
                     id_residuo=det.id_residuo,
                     cantidad=det.cantidad
                 )
-                for det in detalles   # <<< usar la lista ya creada
+                for det in detalles  
             ]
 )
