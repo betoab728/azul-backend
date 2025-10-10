@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from uuid import UUID
-
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion as SolicitudEntity
 from app.domain.entities.detalle_solicitud import DetalleSolicitud as DetalleEntity
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacionConDatos

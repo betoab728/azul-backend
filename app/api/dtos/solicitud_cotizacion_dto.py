@@ -28,17 +28,24 @@ class SolicitudCotizacionReadDto(BaseModel):
     id_embarcacion: Optional[UUID]
     created_at: datetime
     updated_at: datetime
+    # detalles vacio, se llena en otro DTO especializado
+    detalles: Optional[List["DetalleSolicitudCreateReadDto"]] = []
 
     class Config:
         orm_mode = True
 
-class DetalleSolicitudReadDto(BaseModel):
+class DetalleSolicitudCreateReadDto(BaseModel):
     id: UUID
     id_residuo: UUID
     cantidad: float
 
     class Config:
         orm_mode = True
+
+class DetalleSolicitudReadDto(BaseModel):
+    residuo: str
+    cantidad: float
+    unidad: str
 
 class SolicitudCotizacionDetalleDto(BaseModel):
     id: UUID
@@ -49,7 +56,7 @@ class SolicitudCotizacionDetalleDto(BaseModel):
     id_embarcacion: Optional[UUID]
     created_at: datetime
     updated_at: datetime
-
+    
     # 👇 detalles incluidos
     detalles: List[DetalleSolicitudReadDto]
 
@@ -84,7 +91,3 @@ class SolicitudConDatosReadDto(BaseModel):
         orm_mode = True
 
 
-class DetalleSolicitudReadDto(BaseModel):
-    residuo: str
-    cantidad: float
-    unidad: str

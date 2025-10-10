@@ -4,7 +4,7 @@ from typing import List
 
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion, DetalleSolicitud
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
-from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto, DetalleSolicitudCreateDto,DetalleSolicitudReadDto
+from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto, DetalleSolicitudCreateDto,DetalleSolicitudCreateReadDto
 
 class CrearSolicitudUseCase:
     def __init__(self, solicitud_repository: SolicitudRepository):
@@ -48,7 +48,7 @@ class CrearSolicitudUseCase:
             created_at=creada.created_at,
             updated_at=creada.updated_at,
             detalles=[
-                DetalleSolicitudReadDto(
+                DetalleSolicitudCreateReadDto(
                     id=det.id,
                     id_residuo=det.id_residuo,
                     cantidad=det.cantidad
