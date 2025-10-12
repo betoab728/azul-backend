@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from datetime import date, datetime
 from sqlmodel import SQLModel, Field
 
-class EstadoCotizaciong(SQLModel, table=True):
+class EstadoCotizacion(SQLModel, table=True):
     __tablename__ = "estado_cotizacion"
     id: UUID = Field(default_factory=uuid4, primary_key=True, index=True)
     nombre: str = Field(max_length=50)

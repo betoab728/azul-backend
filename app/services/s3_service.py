@@ -41,3 +41,15 @@ class S3Service:
             raise Exception("Credenciales de AWS no válidas.")
         except Exception as e:
             raise Exception(f"Error al subir el archivo a S3: {str(e)}")
+            
+    def generar_url_descarga(self, key: str, expira_en: int = 60):
+        """Genera una URL firmada temporal"""
+        try:
+            url = self.s3.generate_presigned_url(
+                "get_object",
+                Params={"Bucket": self.bucket_name, "Key": key},
+                ExpiresIn=expira_en
+            )
+            return url
+        except Exception as e:
+            raise Exception(f"Error al generar URL de descarga: {str(e)}")

@@ -15,6 +15,7 @@ class SolicitudCotizacion(SQLModel, table=True):
     id_embarcacion: Optional[UUID] = Field(default=None, foreign_key="embarcacion.id")
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    direccion_recojo: Optional[str] = None
 
     # relación con detalle
     detalles: List["DetalleSolicitud"] = Relationship(back_populates="solicitud")

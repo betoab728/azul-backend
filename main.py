@@ -19,6 +19,7 @@ from app.api.routes.estado_solicitud_routes import router as estado_solicitud_ro
 from app.api.routes.puerto_routes import router as puerto_router
 from app.api.routes.detalle_solicitud_routes import router as detalle_solicitud_router
 from app.api.routes.cotizacion_routes import router as cotizacion_router
+from app.api.routes.files_routes import router as files_router
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
 app.include_router(ubigeo_router)
@@ -37,6 +38,7 @@ app.include_router(estado_solicitud_router)
 app.include_router(puerto_router)
 app.include_router(detalle_solicitud_router)
 app.include_router(cotizacion_router)
+app.include_router(files_router)
 
 
 from fastapi.middleware.cors import CORSMiddleware

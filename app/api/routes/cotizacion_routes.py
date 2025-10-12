@@ -4,6 +4,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.infrastructure.db.database import get_db
 from app.services.cotizacion_service import CotizacionService
 from app.api.auth import get_current_user  # 🔒 proteger las rutas
+from app.api.dtos.cotizacion_dto import CotizacionReadDto
+from typing import List
+
 import logging
 
 router = APIRouter(
@@ -26,9 +29,6 @@ async def crear_cotizacion(
     pdf_file: UploadFile = Form(...),  #  usar UploadFile aquí
     session: AsyncSession = Depends(get_db)
 ):
-
-
-   
     service = CotizacionService(session)
     cotizacion = await service.crear_cotizacion(
         id_solicitud=id_solicitud,
@@ -39,3 +39,8 @@ async def crear_cotizacion(
         pdf_file=pdf_file  # pasar el objeto completo (no .file)
     )
     return {"mensaje": "Cotización creada correctamente", "data": cotizacion}
+
+@router.get("/", response_model=List[CotizacionReadDto])
+async def listar_cotizaciones(session: AsyncSession = Depends(get_db)):
+    service = CotizacionService(session)
+    return await service.listar_cotizaciones()

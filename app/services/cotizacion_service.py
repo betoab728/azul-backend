@@ -4,6 +4,17 @@ from app.infrastructure.db.models.cotizacion import Cotizacion
 from app.services.s3_service import S3Service
 from uuid import uuid4
 from datetime import datetime
+from app.api.dtos.cotizacion_dto import CotizacionReadDto
+from sqlalchemy import text
+from app.infrastructure.db.models.estado_cotizacion import EstadoCotizacion as EstadoCotizacionModel
+from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion as SolicitudCotizacionModel
+from app.infrastructure.db.models.embarcacion import Embarcacion as EmbarcacionModel
+from app.infrastructure.db.models.generador_residuo import GeneradorResiduo as GeneradorResiduoModel
+from app.infrastructure.db.models.cotizacion import Cotizacion as CotizacionModel
+from sqlalchemy import func
+from sqlalchemy.sql.sqltypes import String
+
+
 
 class CotizacionService:
     def __init__(self, session: AsyncSession):
@@ -32,3 +43,24 @@ class CotizacionService:
         await self.session.commit()
         await self.session.refresh(nueva_cotizacion)
         return nueva_cotizacion
+    
+    async def listar_cotizaciones(self):
+        result = await self.session.execute(
+            select(
+                CotizacionModel.id.cast(String).label("id"),
+                CotizacionModel.fecha_emision.label("fecha_cotizacion"),
+                SolicitudCotizacionModel.fecha.label("fecha_solicitud"),
+                GeneradorResiduoModel.razon_social.label("empresa"),
+                EstadoCotizacionModel.nombre.label("estado"),
+                CotizacionModel.observaciones,
+                CotizacionModel.pdf_url,
+                func.to_char(CotizacionModel.created_at, "HH24:MI:SS").label("hora_cotizacion"),
+            )
+            .join(EstadoCotizacionModel, CotizacionModel.id_estado_cotizacion == EstadoCotizacionModel.id)
+            .join(SolicitudCotizacionModel, CotizacionModel.id_solicitud == SolicitudCotizacionModel.id)
+            .join(EmbarcacionModel, SolicitudCotizacionModel.id_embarcacion == EmbarcacionModel.id)
+            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .order_by(CotizacionModel.created_at.desc())
+        )
+        rows = result.mappings().all()
+        return [CotizacionReadDto(**row) for row in rows]

@@ -12,7 +12,8 @@ class SolicitudCotizacion:
      observaciones: Optional[str],
      created_at: datetime, 
      updated_at: datetime,
-     id_embarcacion: Optional[UUID]
+     id_embarcacion: Optional[UUID],
+     direccion_recojo: Optional[str] = None
      ):
         self.id = id
         self.fecha = fecha
@@ -22,6 +23,7 @@ class SolicitudCotizacion:
         self.created_at = created_at
         self.updated_at = updated_at
         self.id_embarcacion = id_embarcacion
+        self.direccion_recojo = direccion_recojo
 
 class DetalleSolicitud:
     def __init__(self, 

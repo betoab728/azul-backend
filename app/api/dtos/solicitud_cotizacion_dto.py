@@ -17,6 +17,7 @@ class SolicitudCotizacionCreateDto(BaseModel):
     id_estado_solicitud: UUID
     observaciones: Optional[str] = None
     id_embarcacion: Optional[UUID] = None
+    direccion_recojo: Optional[str] = None
     detalles: List[DetalleSolicitudCreateDto]  #  maestro-detalle en un solo JSON
 
 class SolicitudCotizacionReadDto(BaseModel):
@@ -28,9 +29,10 @@ class SolicitudCotizacionReadDto(BaseModel):
     id_embarcacion: Optional[UUID]
     created_at: datetime
     updated_at: datetime
+    direccion_recojo: Optional[str] 
     # detalles vacio, se llena en otro DTO especializado
     detalles: Optional[List["DetalleSolicitudCreateReadDto"]] = []
-
+    
     class Config:
         orm_mode = True
 

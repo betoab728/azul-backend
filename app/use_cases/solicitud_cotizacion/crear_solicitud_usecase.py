@@ -20,7 +20,8 @@ class CrearSolicitudUseCase:
             observaciones=dto.observaciones,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
-            id_embarcacion=dto.id_embarcacion
+            id_embarcacion=dto.id_embarcacion,
+            direccion_recojo=dto.direccion_recojo
         )
 
         # 2Construir entidades detalle
@@ -47,6 +48,7 @@ class CrearSolicitudUseCase:
             id_embarcacion=creada.id_embarcacion,
             created_at=creada.created_at,
             updated_at=creada.updated_at,
+            direccion_recojo=creada.direccion_recojo,
             detalles=[
                 DetalleSolicitudCreateReadDto(
                     id=det.id,
