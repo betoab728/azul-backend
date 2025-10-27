@@ -2,13 +2,15 @@ from typing import Optional
 from uuid import UUID, uuid4
 from datetime import date, datetime
 from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship
 
-class Trazabilidad(SQLModel, table=True):
-    __tablename__ = "trazabilidad"
+class TrazabilidadOrden(SQLModel, table=True):
+    __tablename__ = "trazabilidad_orden"
+
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     id_orden: UUID = Field(foreign_key="orden_traslado.id")
-    id_estado: UUID = Field(foreign_key="estado_transporte.id")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
-    nota: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
-    updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    latitud: float
+    longitud: float
+    fecha_hora: datetime = Field(default_factory=datetime.utcnow)
+
+    orden: Optional["OrdenTraslado"] = Relationship(back_populates="trazabilidad")

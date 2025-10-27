@@ -26,6 +26,7 @@ async def crear_cotizacion(
     fecha_emision: str = Form(...),
     id_estado_cotizacion: str = Form(...),
     observaciones: str = Form(None),
+    id_vehiculo: str = Form(...),
     pdf_file: UploadFile = Form(...),  #  usar UploadFile aquí
     session: AsyncSession = Depends(get_db)
 ):

@@ -36,9 +36,12 @@ router = APIRouter(
 @router.post("", response_model=SolicitudCotizacionReadDto)
 async def crear_solicitud(
     input_data: SolicitudCotizacionCreateDto,
+    current_user: UsuarioToken = Depends(get_current_user),
     use_case: CrearSolicitudUseCase = Depends(get_crear_solicitud_use_case)
 ):
     try:
+        # Inyectar el id_generador del token en el DTO
+        input_data.id_generador = current_user.id_generador
         return await use_case.execute(input_data)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

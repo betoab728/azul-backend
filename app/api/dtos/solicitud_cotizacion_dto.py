@@ -17,6 +17,7 @@ class SolicitudCotizacionCreateDto(BaseModel):
     id_estado_solicitud: UUID
     observaciones: Optional[str] = None
     id_embarcacion: Optional[UUID] = None
+    id_generador: Optional[UUID] = None
     direccion_recojo: Optional[str] = None
     detalles: List[DetalleSolicitudCreateDto]  #  maestro-detalle en un solo JSON
 

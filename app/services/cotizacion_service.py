@@ -14,14 +14,12 @@ from app.infrastructure.db.models.cotizacion import Cotizacion as CotizacionMode
 from sqlalchemy import func
 from sqlalchemy.sql.sqltypes import String
 
-
-
 class CotizacionService:
     def __init__(self, session: AsyncSession):
         self.session = session
         self.s3 = S3Service()
 
-    async def crear_cotizacion(self, id_solicitud, forma_pago, fecha_emision, id_estado_cotizacion, observaciones, pdf_file):
+    async def crear_cotizacion(self, id_solicitud, forma_pago, fecha_emision, id_estado_cotizacion, observaciones,id_vehiculo, pdf_file):
         # Subir PDF a S3
         upload_result =await  self.s3.upload_file(pdf_file, pdf_file.filename)
         pdf_url = upload_result["url"]
@@ -34,6 +32,7 @@ class CotizacionService:
             fecha_emision=datetime.strptime(fecha_emision, "%Y-%m-%d").date(),
             id_estado_cotizacion=id_estado_cotizacion,
             observaciones=observaciones,
+            id_vehiculo=id_vehiculo,
             pdf_url=pdf_url,  # Guarda la URL pública del PDF
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow()

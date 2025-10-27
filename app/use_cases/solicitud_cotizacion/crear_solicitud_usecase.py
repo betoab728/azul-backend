@@ -21,6 +21,7 @@ class CrearSolicitudUseCase:
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
             id_embarcacion=dto.id_embarcacion,
+            id_generador=dto.id_generador,
             direccion_recojo=dto.direccion_recojo
         )
 

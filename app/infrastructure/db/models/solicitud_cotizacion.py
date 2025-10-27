@@ -13,6 +13,7 @@ class SolicitudCotizacion(SQLModel, table=True):
     id_estado_solicitud: UUID = Field(foreign_key="estado_solicitud.id")
     observaciones: Optional[str] = None
     id_embarcacion: Optional[UUID] = Field(default=None, foreign_key="embarcacion.id")
+    id_generador: UUID = Field(foreign_key="generador_residuo.id")
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     direccion_recojo: Optional[str] = None

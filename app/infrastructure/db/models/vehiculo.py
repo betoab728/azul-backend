@@ -28,6 +28,11 @@ class Vehiculo(SQLModel, table=True):
     capacidad_toneladas: Optional[float] = Field(default=None, description="Capacidad de carga en toneladas")
     estado: Optional[str] = Field(default="activo", max_length=20)
     observaciones: Optional[str] = None
+    # Nuevos campos para URLs de documentos
+    url_tarjeta_propiedad: Optional[str] = Field(default=None, max_length=255)
+    url_certificado_itv: Optional[str] = Field(default=None, max_length=255)
+    url_soat: Optional[str] = Field(default=None, max_length=255)
+    url_tarjeta_circulacion: Optional[str] = Field(default=None, max_length=255)
 
     # Relación con TipoVehiculo
     id_tipo_vehiculo: UUID = Field(foreign_key="tipo_vehiculo.id", nullable=False)

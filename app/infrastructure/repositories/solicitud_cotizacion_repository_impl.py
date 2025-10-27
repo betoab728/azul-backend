@@ -32,6 +32,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                 id_estado_solicitud=solicitud.id_estado_solicitud,
                 observaciones=solicitud.observaciones,
                 id_embarcacion=solicitud.id_embarcacion,
+                id_generador=solicitud.id_generador,
                 created_at=datetime.utcnow(),
                 updated_at=datetime.utcnow()
             )
@@ -199,6 +200,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             id=model.id,
             fecha=model.fecha,
             id_puerto=model.id_puerto,
+            id_generador=model.id_generador,
             id_estado_solicitud=model.id_estado_solicitud,
             observaciones=model.observaciones,
             created_at=model.created_at,

@@ -3,6 +3,7 @@ from typing import Optional
 from uuid import UUID
 from decimal import Decimal
 
+
 class SolicitudCotizacion:
     def __init__(self,
      id: UUID, 
@@ -13,6 +14,7 @@ class SolicitudCotizacion:
      created_at: datetime, 
      updated_at: datetime,
      id_embarcacion: Optional[UUID],
+     id_generador: Optional[UUID],
      direccion_recojo: Optional[str] = None
      ):
         self.id = id
@@ -23,6 +25,7 @@ class SolicitudCotizacion:
         self.created_at = created_at
         self.updated_at = updated_at
         self.id_embarcacion = id_embarcacion
+        self.id_generador = id_generador
         self.direccion_recojo = direccion_recojo
 
 class DetalleSolicitud:
