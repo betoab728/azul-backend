@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 import os
 
-# Cargar variables desde .env
+# Cargar variables desde .env (solo para entorno local)
 load_dotenv()
 
 class Settings(BaseSettings):
@@ -10,17 +10,10 @@ class Settings(BaseSettings):
     app_version: str = os.getenv("APP_VERSION")
 
     postgres_host: str = os.getenv("POSTGRES_HOST")
+    postgres_port: int = int(os.getenv("POSTGRES_PORT"))
     postgres_user: str = os.getenv("POSTGRES_USER")
     postgres_password: str = os.getenv("POSTGRES_PASSWORD")
     postgres_db: str = os.getenv("POSTGRES_DB")
-    postgres_port: str = os.getenv("POSTGRES_PORT")
-    secret_key: str = os.getenv("SECRET_KEY")
-    #aws s3
-    aws_access_key_id: str = os.getenv("AWS_ACCESS_KEY_ID")
-    aws_secret_access_key: str = os.getenv("AWS_SECRET_ACCESS_KEY")
-    aws_region: str = os.getenv("AWS_REGION")
-    aws_s3_bucket_name: str = os.getenv("S3_BUCKET_NAME")
-    
 
     environment: str = os.getenv("ENVIRONMENT")
 
