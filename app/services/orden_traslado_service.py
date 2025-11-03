@@ -18,6 +18,7 @@ from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacio
 from app.infrastructure.db.models.generador_residuo import GeneradorResiduo
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
 from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
+from uuid import UUID
 
 class OrdenTrasladoService:
     def __init__(self, session: AsyncSession):
@@ -151,6 +152,44 @@ class OrdenTrasladoService:
 
         return ordenes_dto
 
+    async def listar_ordenes_por_generador(self, id_generador: str):
+        query = (
+            select(
+                OrdenTraslado.id,
+                OrdenTraslado.fecha,
+                OrdenTraslado.serie,
+                OrdenTraslado.numero,
+                OrdenTraslado.created_at,
+                OrdenTraslado.observaciones,
+                GeneradorResiduo.razon_social,
+                OrdenTraslado.pdf_url
+            )
+            .join(Cotizacion, Cotizacion.id == OrdenTraslado.id_cotizacion)
+            .join(SolicitudCotizacion, SolicitudCotizacion.id == Cotizacion.id_solicitud)
+            .join(GeneradorResiduo, GeneradorResiduo.id == SolicitudCotizacion.id_generador)
+            .where(GeneradorResiduo.id == id_generador)
+        )
+
+        result = await self.session.exec(query)
+        ordenes = result.all()
+
+        # Aquí orden es una tupla, no un objeto con atributos
+        ordenes_dto = [
+            OrdenResumenDto(
+                id=str(o[0]),
+                fecha=o[1].strftime("%d/%m/%Y"),
+                hora=o[4].strftime("%H:%M:%S"),
+                serie=o[2],
+                numero=str(o[3]).zfill(6),
+                observaciones=o[5],
+                razon_social=o[6],
+                pdf_url=o[7]
+            )
+            for o in ordenes
+        ]
+
+        return ordenes_dto
+
     
     async def obtener_documentos_por_orden(self, id_orden: str) -> OrdenDocumentosDto:
         query = (
@@ -188,4 +227,60 @@ class OrdenTrasladoService:
             fecha_registro=row.fecha_registro,
         )
 
+    
+    
+    async def subir_documento(self, id_orden: str, tipo: str, file: UploadFile):
+        """
+        Sube un documento (PDF) a S3 y actualiza o crea el registro en la base de datos.
+        Tipos válidos:
+          guia_remision, factura, guia_transportista, informe, manifiesto, certificado
+        """
+        tipos_validos = {
+            "guia_remision": "guia_remision_url",
+            "factura": "factura_url",
+            "guia_transportista": "guia_transportista_url",
+            "informe": "informe_url",
+            "manifiesto": "manifiesto_url",
+            "certificado": "certificado_url",
+        }
+
+        if tipo not in tipos_validos:
+            raise HTTPException(status_code=400, detail="Tipo de documento no válido")
+
+        # Generar nombre único de archivo
+        filename = f"{tipo}_{id_orden}_{int(datetime.utcnow().timestamp())}.pdf"
+
+        try:
+            upload_result = await self.s3.upload_file(file, filename)
+            file_url = upload_result["url"]
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error al subir archivo a S3: {str(e)}")
+
+        # Buscar si ya existe registro en orden_documentos
+        result = await self.session.exec(
+            select(OrdenDocumentos).where(OrdenDocumentos.id_orden == UUID(id_orden))
+        )
+        documentos = result.first()
+
+        if documentos:
+            # Actualiza solo el campo del documento correspondiente
+            setattr(documentos, tipos_validos[tipo], file_url)
+            documentos.fecha_registro = datetime.utcnow()
+        else:
+            # Crea nuevo registro si no existe
+            documentos = OrdenDocumentos(
+                id_orden=id_orden,
+                **{tipos_validos[tipo]: file_url},
+                fecha_registro=datetime.utcnow()
+            )
+            self.session.add(documentos)
+
+        await self.session.commit()
+        await self.session.refresh(documentos)
+
+        return {
+            "mensaje": f"{tipo.replace('_', ' ').title()} subido correctamente",
+            "url": file_url,
+            "id_orden": id_orden,
+        }
 

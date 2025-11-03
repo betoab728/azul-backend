@@ -15,4 +15,5 @@ class Usuario(SQLModel, table=True):
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     id_generador: UUID = Field(foreign_key="generador_residuo.id")  # FK
 
-    generador: "GeneradorResiduo" = Relationship()
+    generador: "GeneradorResiduo" = Relationship(back_populates="usuarios")
+    rol: "Rol" = Relationship(back_populates="usuarios")

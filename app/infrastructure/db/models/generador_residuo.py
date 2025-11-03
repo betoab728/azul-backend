@@ -2,6 +2,7 @@ from typing import Optional
 from uuid import UUID, uuid4
 from datetime import date, datetime
 from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship
 
 class GeneradorResiduo(SQLModel, table=True):
     __tablename__ = "generador_residuo"
@@ -19,3 +20,5 @@ class GeneradorResiduo(SQLModel, table=True):
     estado: Optional[int] = Field(default=1, description="Estado del tipo de residuo (1: Activo, 0: Inactivo)")
     latitud: Optional[float] = Field(default=None, nullable=True)
     longitud: Optional[float] = Field(default=None, nullable=True)
+
+    usuarios: list["Usuario"] = Relationship(back_populates="generador")

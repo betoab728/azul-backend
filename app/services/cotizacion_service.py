@@ -13,6 +13,7 @@ from app.infrastructure.db.models.generador_residuo import GeneradorResiduo as G
 from app.infrastructure.db.models.cotizacion import Cotizacion as CotizacionModel
 from sqlalchemy import func
 from sqlalchemy.sql.sqltypes import String
+from uuid import UUID
 
 class CotizacionService:
     def __init__(self, session: AsyncSession):
@@ -59,6 +60,28 @@ class CotizacionService:
             .join(SolicitudCotizacionModel, CotizacionModel.id_solicitud == SolicitudCotizacionModel.id)
             .join(EmbarcacionModel, SolicitudCotizacionModel.id_embarcacion == EmbarcacionModel.id)
             .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .order_by(CotizacionModel.created_at.desc())
+        )
+        rows = result.mappings().all()
+        return [CotizacionReadDto(**row) for row in rows]
+
+    async def listar_cotizaciones_por_generador(self, id_generador: UUID):
+        result = await self.session.execute(
+            select(
+                CotizacionModel.id.cast(String).label("id"),
+                CotizacionModel.fecha_emision.label("fecha_cotizacion"),
+                SolicitudCotizacionModel.fecha.label("fecha_solicitud"),
+                GeneradorResiduoModel.razon_social.label("empresa"),
+                EstadoCotizacionModel.nombre.label("estado"),
+                CotizacionModel.observaciones,
+                CotizacionModel.pdf_url,
+                func.to_char(CotizacionModel.created_at, "HH24:MI:SS").label("hora_cotizacion"),
+            )
+            .join(EstadoCotizacionModel, CotizacionModel.id_estado_cotizacion == EstadoCotizacionModel.id)
+            .join(SolicitudCotizacionModel, CotizacionModel.id_solicitud == SolicitudCotizacionModel.id)
+            .join(GeneradorResiduoModel, SolicitudCotizacionModel.id_generador == GeneradorResiduoModel.id)
+            .join(EmbarcacionModel, SolicitudCotizacionModel.id_embarcacion == EmbarcacionModel.id, isouter=True)
+            .where(GeneradorResiduoModel.id == id_generador)
             .order_by(CotizacionModel.created_at.desc())
         )
         rows = result.mappings().all()

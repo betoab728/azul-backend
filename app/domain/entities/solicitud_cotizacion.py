@@ -51,7 +51,7 @@ class SolicitudCotizacionConDatos:
         observaciones: Optional[str],
         created_at: datetime,
         updated_at: datetime,
-        embarcacion: str,
+        embarcacion: Optional[str],
         generador: str
     ):
         self.id = id

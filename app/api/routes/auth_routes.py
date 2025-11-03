@@ -15,10 +15,12 @@ async def login(
     usuario = await use_case.execute(login_data.nombre, login_data.clave)
     if not usuario:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
+
     token = crear_token_de_acceso(
         user_id=usuario.id,
         id_generador=usuario.id_generador,
         expires_delta=timedelta(minutes=1440))
+
     return {
         "access_token": token,
         "token_type": "bearer",
@@ -26,6 +28,7 @@ async def login(
             "id": usuario.id,
             "nombre": usuario.nombre,
             "correo": usuario.correo,
+            "rol": usuario.rol,
             "id_generador": usuario.id_generador,
             "ruc": usuario.ruc,
             "razon_social": usuario.razon_social

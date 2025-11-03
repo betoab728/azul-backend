@@ -1,9 +1,7 @@
-
 import boto3
 from botocore.exceptions import NoCredentialsError
 from datetime import datetime
 from app.config.settings import settings
-
 
 class S3Service:
     def __init__(self):

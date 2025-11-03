@@ -153,23 +153,23 @@ class SolicitudRepositoryImpl(SolicitudRepository):
     async def get_by_generador(self, id_generador: UUID) -> List[SolicitudCotizacionConDatos]:
         result = await self.session.execute(
             select(
-                    SolicitudModel.id,
-                    SolicitudModel.fecha,
-                    func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
-                    SolicitudModel.observaciones,
-                    PuertoModel.nombre.label("puerto"),
-                    EstadoSolicitudModel.nombre.label("estado_solicitud"),
-                    EmbarcacionModel.nombre.label("embarcacion"),
-                    GeneradorResiduoModel.razon_social.label("generador"),
-                    SolicitudModel.created_at,
-                    SolicitudModel.updated_at,
-                )
-                .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
-                .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
-                .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
-                .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
-                .where(GeneradorResiduoModel.id == id_generador)
+                SolicitudModel.id,
+                SolicitudModel.fecha,
+                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+                SolicitudModel.observaciones,
+                PuertoModel.nombre.label("puerto"),
+                EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                EmbarcacionModel.nombre.label("embarcacion"),
+                GeneradorResiduoModel.razon_social.label("generador"),
+                SolicitudModel.created_at,
+                SolicitudModel.updated_at,
             )
+            .join(GeneradorResiduoModel, SolicitudModel.id_generador == GeneradorResiduoModel.id)
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)  # 🔹 Opcional
+            .where(GeneradorResiduoModel.id == id_generador)
+        )
         rows = result.all()
         return [self._row_to_con_datos(row) for row in rows]
             

@@ -44,7 +44,8 @@ class UsuarioLoginResultDto(BaseModel):
     id_generador: UUID
     ruc: Optional[str]
     razon_social: Optional[str]
-    clave: str  # Incluir la clave para verificación durante el login
+    clave: str  # Incluir la clave para verificación durante el login   
+    rol: Optional[str]
 
 class UserLoginInfoDto(BaseModel):
     id: UUID
@@ -53,6 +54,7 @@ class UserLoginInfoDto(BaseModel):
     id_generador: UUID
     ruc: Optional[str]
     razon_social: Optional[str]
+    rol: Optional[str]
 
 class TokenDto(BaseModel):
     access_token: str

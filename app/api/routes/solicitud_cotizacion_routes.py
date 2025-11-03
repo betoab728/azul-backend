@@ -72,7 +72,6 @@ async def listar_por_generador(
 ):
     return await use_case.execute(current_user.id_generador)
 
-
 # Listar solicitudes por puerto
 @router.get("/puerto/{id_puerto}", response_model=list[SolicitudConDatosReadDto])
 async def listar_por_puerto(

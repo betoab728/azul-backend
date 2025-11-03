@@ -55,6 +55,20 @@ async def listar_ordenes(
     
     return ordenes
 
+#listar ordenes por generador
+@router.get("/generador", response_model=List[OrdenResumenDto])
+async def listar_ordenes_por_generador(
+    current_user: UsuarioToken = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db)
+):
+    service = OrdenTrasladoService(session)
+    ordenes = await service.listar_ordenes_por_generador(current_user.id_generador)
+    
+    if not ordenes:
+        raise HTTPException(status_code=404, detail="No se encontraron órdenes para este generador")
+    
+    return ordenes
+
 @router.get("/{id_orden}/documentos", response_model=OrdenDocumentosDto)
 async def obtener_documentos_por_orden(
     id_orden: UUID,
@@ -63,3 +77,21 @@ async def obtener_documentos_por_orden(
 ):
     service = OrdenTrasladoService(session)
     return await service.obtener_documentos_por_orden(str(id_orden))
+
+
+#subir documento específico
+@router.post("/{id_orden}/documentos/{tipo}")
+async def subir_documento_orden(
+    id_orden: UUID,
+    tipo: str,
+    file: UploadFile = Form(...),
+    session: AsyncSession = Depends(get_db),
+    current_user: UsuarioToken = Depends(get_current_user)
+):
+    """
+    Sube un documento asociado a una orden de traslado.
+    Tipos válidos: guia_remision, factura, guia_transportista, informe, manifiesto, certificado
+    """
+    service = OrdenTrasladoService(session)
+    return await service.subir_documento(str(id_orden), tipo, file)
+

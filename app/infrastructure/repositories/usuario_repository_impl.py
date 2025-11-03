@@ -8,6 +8,8 @@ from app.domain.interfaces.usuario_repository import UsuarioRepository
 from app.infrastructure.db.models.usuario import Usuario as UsuarioModel
 from datetime import datetime
 from sqlalchemy import text
+from sqlalchemy.orm import joinedload
+from app.infrastructure.db.models.usuario import Usuario
 
 class UsuarioRepositoryImpl(UsuarioRepository):
     def __init__(self, session: AsyncSession):
@@ -93,22 +95,25 @@ class UsuarioRepositoryImpl(UsuarioRepository):
         return [dict(row._mapping) for row in rows]  # convierte Row en dicts
     
     async def obtener_usuario_con_generador(self, nombre: str) -> Optional[UsuarioLoginResultDto]:
-        query = text("""
-            SELECT 
-                u.id as id,
-                u.nombre as nombre,
-                u.correo as correo,
-                u.id_generador as id_generador,
-                g.ruc as ruc,
-                g.razon_social as razon_social,
-                u.clave as clave
-            FROM usuario u
-            JOIN generador_residuo g ON g.id = u.id_generador
-            WHERE u.nombre = :nombre
-        """)
-        result = await self.session.execute(query, {"nombre": nombre})
-        row = result.first()
-        if row:
-            data = dict(row._mapping)
-            return UsuarioLoginResultDto(**data)
+        stmt = (
+            select(Usuario)
+            .options(joinedload(Usuario.generador), joinedload(Usuario.rol))
+            .where(Usuario.nombre == nombre)
+        )
+
+        result = await self.session.execute(stmt)
+        usuario: Usuario | None = result.scalar_one_or_none()
+
+        if usuario:
+            return UsuarioLoginResultDto(
+                id=usuario.id,
+                nombre=usuario.nombre,
+                correo=usuario.correo,
+                id_generador=usuario.id_generador,
+                ruc=usuario.generador.ruc if usuario.generador else None,
+                razon_social=usuario.generador.razon_social if usuario.generador else None,
+                rol=usuario.rol.nombre if usuario.rol else '',
+                clave=usuario.clave,
+            )
+
         return None

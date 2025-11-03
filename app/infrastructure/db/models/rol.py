@@ -2,6 +2,7 @@ from typing import Optional
 from uuid import UUID, uuid4
 from datetime import date, datetime
 from sqlmodel import SQLModel, Field
+from sqlmodel import Relationship
 
 class Rol(SQLModel, table=True):
     __tablename__ = "rol"
@@ -10,3 +11,5 @@ class Rol(SQLModel, table=True):
     descripcion: str = Field(max_length=50)
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
     updated_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+    usuarios: list["Usuario"] = Relationship(back_populates="rol")

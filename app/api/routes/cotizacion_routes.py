@@ -6,6 +6,7 @@ from app.services.cotizacion_service import CotizacionService
 from app.api.auth import get_current_user  # 🔒 proteger las rutas
 from app.api.dtos.cotizacion_dto import CotizacionReadDto
 from typing import List
+from app.api.dtos.usuario_dto import UsuarioToken
 
 import logging
 
@@ -45,3 +46,13 @@ async def crear_cotizacion(
 async def listar_cotizaciones(session: AsyncSession = Depends(get_db)):
     service = CotizacionService(session)
     return await service.listar_cotizaciones()
+
+#cotizaciones por generador
+@router.get("/generador", response_model=List[CotizacionReadDto])
+async def listar_cotizaciones_por_generador(
+    session: AsyncSession = Depends(get_db),
+    current_user:UsuarioToken = Depends(get_current_user)
+):
+    service = CotizacionService(session)
+    return await service.listar_cotizaciones_por_generador(current_user.id_generador)
+
