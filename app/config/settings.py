@@ -6,23 +6,28 @@ import os
 load_dotenv()
 
 class Settings(BaseSettings):
-    app_name: str = os.getenv("APP_NAME")
-    app_version: str = os.getenv("APP_VERSION")
+    # Ya NO necesitas asignar os.getenv(...)
+    # Pydantic-settings buscará automáticamente estas variables en el entorno
+    app_name: str
+    app_version: str
 
-    postgres_host: str = os.getenv("POSTGRES_HOST")
-   # postgres_port: int = int(os.getenv("POSTGRES_PORT"))
-    postgres_port: str = os.getenv("POSTGRES_PORT")
-    postgres_user: str = os.getenv("POSTGRES_USER")
-    postgres_password: str = os.getenv("POSTGRES_PASSWORD")
-    postgres_db: str = os.getenv("POSTGRES_DB")
+    postgres_host: str
+    # Lo he dejado como str para que coincida con la validación,
+    # aunque lo ideal sería usar int si es un puerto
+    postgres_port: str 
+    postgres_user: str
+    postgres_password: str
+    postgres_db: str
 
-    environment: str = os.getenv("ENVIRONMENT")
+    environment: str
 
     @property
     def database_url(self) -> str:
+        # Asegúrate de usar f-strings multilinea correctamente si mantienes este formato
         return (
             f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
 
+# Cuando instancies Settings(), pydantic-settings llenará automáticamente los campos
 settings = Settings()
