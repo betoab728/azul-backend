@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     app_version: str = os.getenv("APP_VERSION")
 
     postgres_host: str = os.getenv("POSTGRES_HOST")
-    postgres_port: int = int(os.getenv("POSTGRES_PORT"))
+   # postgres_port: int = int(os.getenv("POSTGRES_PORT"))
+    postgres_port: str = os.getenv("POSTGRES_PORT")
     postgres_user: str = os.getenv("POSTGRES_USER")
     postgres_password: str = os.getenv("POSTGRES_PASSWORD")
     postgres_db: str = os.getenv("POSTGRES_DB")
