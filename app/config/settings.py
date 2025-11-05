@@ -47,3 +47,4 @@ class Settings:
 
 settings = Settings()
 print(f"DATABASE_URL usada en runtime: {settings.database_url}")
+print(f"DATABASE_URL full usada en runtime: {settings.FULL_DATABASE_URL}")
