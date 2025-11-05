@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-
 from app.config.settings import settings
 
 # Construir la URL de conexión
