@@ -7,7 +7,7 @@ from app.config.settings import settings
 from app.api.dtos.usuario_dto import UsuarioToken
 
 # Llave secreta para firmar el token
-SECRET_KEY = settings.secret_key  # Usa una variable de entorno en producción
+SECRET_KEY = settings.SECRET_KEY  # Usa una variable de entorno en producción
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

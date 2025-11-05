@@ -27,9 +27,16 @@ class Settings:
     def database_url(self) -> str:
         """Usa DATABASE_URL en Railway o construye la local."""
         db_url = os.getenv("DATABASE_URL")
+
         if db_url:
-            # Railway suele inyectar con formato postgresql://, debes adaptar para asyncpg
-            return db_url.replace("postgres://", "postgresql+asyncpg://")
+            # Asegura que use el driver async siempre
+            if db_url.startswith("postgres://"):
+                db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif db_url.startswith("postgresql://"):
+                db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return db_url
+
+        # Si no existe DATABASE_URL, construye la local
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"

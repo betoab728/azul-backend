@@ -5,9 +5,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from app.config.settings import settings
 from sqlmodel import SQLModel
+
+
 DATABASE_URL = settings.database_url
-
-
 engine = create_async_engine(
     DATABASE_URL,
     echo=True,
