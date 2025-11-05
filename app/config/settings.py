@@ -1,8 +1,10 @@
 from dotenv import load_dotenv
 import os
 
-# Cargar variables desde .env (solo local)
-load_dotenv()
+# Cargar .env solo si existe (para entorno local)
+dotenv_path = os.path.join(os.path.dirname(__file__), "../../.env")
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
 
 class Settings:
     APP_NAME = os.getenv("APP_NAME")
@@ -27,26 +29,21 @@ class Settings:
     def database_url(self) -> str:
         """Usa DATABASE_URL en Railway o construye la local."""
         db_url = os.getenv("DATABASE_URL")
+        print(f"DATABASE_URL detectada: {db_url}")  # 👈 útil para debug
 
         if db_url:
-            # Normaliza para asyncpg
-            if "+asyncpg" not in db_url:
+            # Asegura que use asyncpg
+            if db_url.startswith("postgres://"):
                 db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif db_url.startswith("postgresql://"):
                 db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            
-            # Validar si tiene puerto
-            import re
-            match = re.match(r".*:(\d+)/.*", db_url)
-            if not match:
-                print("⚠️ DATABASE_URL sin puerto válido, usando configuración manual")
-            else:
-                print(f"✅ DATABASE_URL detectada: {db_url}")
-                return db_url
+            return db_url
 
-        # Construir la URL manual si la anterior es inválida
+        # Si no existe DATABASE_URL, construye manualmente
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
 settings = Settings()
+print(f"DATABASE_URL usada en runtime: {settings.database_url}")
