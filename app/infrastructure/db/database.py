@@ -8,6 +8,7 @@ from sqlmodel import SQLModel
 
 
 DATABASE_URL = settings.database_url
+print(f"DATABASE_URL usada en runtime: {DATABASE_URL}")
 engine = create_async_engine(
     DATABASE_URL,
     echo=True,
