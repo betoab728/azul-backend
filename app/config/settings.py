@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 
+# Esto no afecta en Railway, pero es útil en local
 load_dotenv()
 
 class Settings:
@@ -13,4 +14,6 @@ class Settings:
         return db_url
 
 settings = Settings()
-print(f"DATABASE_URL usada en runtime: {settings.database_url}")
+
+DATABASE_URL = settings.database_url
+print(f"DATABASE_URL usada en runtime: {DATABASE_URL}")
