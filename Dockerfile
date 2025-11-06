@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8000
 
 # Comando de inicio (usa gunicorn con uvicorn worker)
-CMD ["uvicorn", "main:app", "--workers", "2", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "[::]:8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "${PORT}"]

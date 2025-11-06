@@ -56,6 +56,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+def root():
+    return {"message": "API del Sistema de Gestión de Residuos funcionando correctamente 🚀"}
 
 
 
