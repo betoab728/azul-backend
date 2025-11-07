@@ -46,6 +46,12 @@ app.include_router(orden_traslado_router)
 
 
 from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:4200",                 # desarrollo local
+    "https://azul-gestion-residuos.netlify.app/"             # producción en Netlify
+]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
