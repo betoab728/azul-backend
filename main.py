@@ -1,6 +1,4 @@
 #This file is part of the "Sistema de Gestión de Residuos" project.
-
-
 from fastapi import FastAPI
 
 from app.api.routes import rol_routes
@@ -58,7 +56,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "API del Sistema de Gestión de Residuos funcionando correctamente 🚀"}
+    return {"message": "API del Sistema de Gestión de Residuos funcionando correctamente"}
 
 
 
