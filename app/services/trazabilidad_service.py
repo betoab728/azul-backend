@@ -3,15 +3,15 @@ from uuid import UUID, uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import datetime
-from app.infrastructure.db.models.trazabilidad_orden import TrazabilidadOrden as Trazabilidad
+from app.infrastructure.db.models.trazabilidad_orden import TrazabilidadOrden
 
 
 class TrazabilidadService:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def registrar_trazabilidad(self, id_orden: UUID, latitud: float, longitud: float) -> Trazabilidad:
-        nueva_traza = Trazabilidad(
+    async def registrar_trazabilidad(self, id_orden: UUID, latitud: float, longitud: float) -> TrazabilidadOrden:
+        nueva_traza = TrazabilidadOrden(
             id=uuid4(),
             id_orden=id_orden,
             latitud=latitud,
@@ -23,7 +23,7 @@ class TrazabilidadService:
         await self.session.refresh(nueva_traza)
         return nueva_traza
 
-    async def listar_por_orden(self, id_orden: UUID) -> List[Trazabilidad]:
+    async def listar_por_orden(self, id_orden: UUID) -> List[TrazabilidadOrden]:
         result = await self.session.execute(
-            select(Trazabilidad).where(Trazabilidad.id_orden == id_orden)
+            select(TrazabilidadOrden).where(TrazabilidadOrden.id_orden == id_orden)
         )
