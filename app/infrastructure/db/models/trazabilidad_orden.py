@@ -1,8 +1,7 @@
 from typing import Optional
 from uuid import UUID, uuid4
 from datetime import date, datetime
-from sqlmodel import SQLModel, Field
-from sqlmodel import Relationship
+from sqlmodel import SQLModel, Field,Relationship
 
 class TrazabilidadOrden(SQLModel, table=True):
     __tablename__ = "trazabilidad_orden"

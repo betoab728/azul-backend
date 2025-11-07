@@ -8,7 +8,7 @@ from sqlmodel import Relationship
 from app.infrastructure.db.models.estado_orden import EstadoOrden
 from app.infrastructure.db.models.cotizacion import Cotizacion
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
-from app.infrastructure.db.models.trazabilidad import TrazabilidadOrden
+from app.infrastructure.db.models.trazabilidad_orden import TrazabilidadOrden
 
 
 class OrdenTraslado(SQLModel, table=True):
