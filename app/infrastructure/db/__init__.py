@@ -20,7 +20,7 @@ from .models import estado_solicitud
 from .models import generador_residuo
 from .models import registro_residuo
 from .models import ruta
-from .models import trazabilidad
+from .models import trazabilidad_orden
 from .models import orden_traslado
 
 
