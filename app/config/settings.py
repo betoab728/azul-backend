@@ -1,38 +1,34 @@
-import os
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-class Settings:
-    APP_NAME = os.getenv("APP_NAME", "Azul Sostenible")
-    APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
+class Settings(BaseSettings):
+    APP_NAME: str = "FastAPI App"
+    ENVIRONMENT: str = "production"
 
-    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-    POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-    POSTGRES_USER = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_DB = os.getenv("POSTGRES_DB")
+    # Variables de conexión a la base de datos
+    POSTGRES_HOST: str | None = None
+    POSTGRES_PORT: int | None = None
+    POSTGRES_USER: str | None = None
+    POSTGRES_PASSWORD: str | None = None
+    POSTGRES_DB: str | None = None
+    DATABASE_URL: str | None = None
 
-    SECRET_KEY = os.getenv("SECRET_KEY")
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_REGION = os.getenv("AWS_REGION")
-    S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
-
-    ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+    model_config = SettingsConfigDict(
+        env_file=".env",  # opcional, para usar localmente
+        env_file_encoding="utf-8",
+        extra="ignore"    # ignora variables no declaradas
+    )
 
     @property
-    def database_url(self) -> str:
-        db_url = os.getenv("DATABASE_URL")
-        print(f"DATABASE_URL detectada: {db_url}")
+    def async_database_url(self) -> str:
+        """Construye la URL completa, usando DATABASE_URL o los componentes."""
+        if self.database_url:
+            return self.database_url
+        if all([self.postgres_user, self.postgres_password, self.postgres_host, self.postgres_db]):
+            return (
+                f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}"
+                f"@{self.postgres_host}:{self.postgres_port or 5432}/{self.postgres_db}"
+            )
+        raise ValueError("No se pudo construir la cadena de conexión a la base de datos.")
 
-        if db_url:
-            if db_url.startswith("postgres://"):
-                db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
-            elif db_url.startswith("postgresql://"):
-                db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            return db_url
-
-        return (
-            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
-            f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
-        )
-
+# Instancia global (usa cache automático)
 settings = Settings()
