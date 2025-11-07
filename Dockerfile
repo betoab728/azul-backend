@@ -1,28 +1,28 @@
 # Imagen base ligera
 FROM python:3.12-slim
 
-# Evita archivos .pyc y buffers
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Variables de entorno
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Define el directorio de trabajo
+# Directorio de trabajo
 WORKDIR /app
 
-# Copia los requerimientos
+# Copiar dependencias
 COPY requirements.txt .
 
-# Instala dependencias del sistema necesarias para PostgreSQL y dependencias comunes
+# Instalar dependencias del sistema y Python
 RUN apt-get update && apt-get install -y \
     libpq-dev gcc \
+    && pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copia todo el código
+# Copiar el código fuente
 COPY . .
 
-# Exponer el puerto (Railway usará el suyo, pero esto es buena práctica)
+# Exponer el puerto (opcional, pero buena práctica)
 EXPOSE 8000
 
-# Comando de inicio (usa gunicorn con uvicorn worker)
-CMD sh -c "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+# Comando de ejecución con gunicorn + uvicorn worker
+CMD ["sh", "-c", "gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT:-8000}"]
