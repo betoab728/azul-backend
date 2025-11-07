@@ -1,31 +1,48 @@
-import os
+from pydantic import BaseSettings
 from dotenv import load_dotenv
+import os
 
-# Cargar variables desde .env (solo en entorno local)
+# Cargar archivo .env solo si existe (útil para entorno local)
 load_dotenv()
 
-# Leer variables de entorno directamente
-APP_NAME = os.getenv("APP_NAME", "FastAPI App")
-ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+class Settings(BaseSettings):
+    APP_NAME: str = "FastAPI App"
+    ENVIRONMENT: str = "production"
 
-# Preferimos una sola variable DATABASE_URL (Railway la genera automáticamente)
-DATABASE_URL = os.getenv("DATABASE_URL")
+    # Variable generada automáticamente por Railway
+    DATABASE_URL: str | None = None
 
-# En caso el entorno no la tenga, intentamos construirla (útil localmente)
-if not DATABASE_URL:
-    POSTGRES_USER = os.getenv("POSTGRES_USER")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-    POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-    POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
-    POSTGRES_DB = os.getenv("POSTGRES_DB")
+    # Variables individuales (para entorno local)
+    POSTGRES_USER: str | None = None
+    POSTGRES_PASSWORD: str | None = None
+    POSTGRES_HOST: str | None = None
+    POSTGRES_PORT: str = "5432"
+    POSTGRES_DB: str | None = None
 
-    if all([POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB]):
-        DATABASE_URL = (
-            f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-            f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
-        )
-    else:
-        raise ValueError("No se pudo construir la cadena de conexión a la base de datos.")
+    class Config:
+        env_file = ".env"
+        case_sensitive = True
 
-# Imprimir en logs (solo para depurar localmente)
-print(f"✅ DATABASE_URL cargada: {DATABASE_URL}")
+    @property
+    def assembled_db_url(self) -> str:
+        """
+        Devuelve la URL completa de conexión.
+        Si DATABASE_URL existe (Railway), la usa directamente.
+        Caso contrario, la construye desde las variables locales.
+        """
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+
+        if all([self.POSTGRES_USER, self.POSTGRES_PASSWORD, self.POSTGRES_HOST, self.POSTGRES_DB]):
+            return (
+                f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+                f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            )
+
+        raise ValueError("❌ No se pudo construir la cadena de conexión a la base de datos.")
+
+# Instancia global para usar en toda la app
+settings = Settings()
+
+# Log para depurar
+print(f"✅ DATABASE_URL cargada: {settings.assembled_db_url}")
