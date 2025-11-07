@@ -53,13 +53,13 @@ class Settings(BaseSettings):
                 f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
             )
 
-        raise ValueError("❌ No se pudo construir la cadena de conexión a la base de datos.")
+        raise ValueError("No se pudo construir la cadena de conexión a la base de datos.")
 
 
 # Instancia global para usar en toda la app
 settings = Settings()
 
 # Logs informativos (solo para depuración)
-print(f"✅ DATABASE_URL cargada: {settings.assembled_db_url}")
-print(f"🔐 SECRET_KEY detectada: {'Sí' if settings.SECRET_KEY else 'No'}")
-print(f"🌎 Entorno: {settings.ENVIRONMENT}")
+print(f"DATABASE_URL cargada: {settings.assembled_db_url}")
+print(f"SECRET_KEY detectada: {'Sí' if settings.SECRET_KEY else 'No'}")
+print(f" Entorno: {settings.ENVIRONMENT}")
