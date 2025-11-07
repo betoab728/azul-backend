@@ -11,7 +11,7 @@ class S3Service:
             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
             region_name=settings.AWS_REGION
         )
-        self.bucket_name = settings.aws_s3_bucket_name
+        self.bucket_name = settings.S3_BUCKET_NAME
 
     async def upload_file(self, file_obj, filename: str):
         try:

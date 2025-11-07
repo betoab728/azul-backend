@@ -26,8 +26,9 @@ class Settings(BaseSettings):
     # --- Configuración AWS (para S3 u otros servicios) ---
     AWS_ACCESS_KEY_ID: str | None = None
     AWS_SECRET_ACCESS_KEY: str | None = None
-    AWS_REGION: str | None = None
     S3_BUCKET_NAME: str | None = None
+    AWS_REGION: str | None = None
+        : str | None = None
 
     class Config:
         env_file = ".env"
