@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import datetime
-from app.infrastructure.db.models.trazabilidad import Trazabilidad
+from app.infrastructure.db.models.trazabilidad_orden import TrazabilidadOrden as Trazabilidad
 
 
 class TrazabilidadService:
