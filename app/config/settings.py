@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
 class Settings(BaseSettings):
     APP_NAME: str = "FastAPI App"
     ENVIRONMENT: str = "production"
@@ -13,22 +14,28 @@ class Settings(BaseSettings):
     DATABASE_URL: str | None = None
 
     model_config = SettingsConfigDict(
-        env_file=".env",  # opcional, para usar localmente
+        env_file=".env",              # útil para entorno local
         env_file_encoding="utf-8",
-        extra="ignore"    # ignora variables no declaradas
+        extra="ignore"                # ignora variables adicionales
     )
 
     @property
-    def async_database_url(self) -> str:
+    def ASYNC_DATABASE_URL(self) -> str:
         """Construye la URL completa, usando DATABASE_URL o los componentes."""
-        if self.database_url:
-            return self.database_url
-        if all([self.postgres_user, self.postgres_password, self.postgres_host, self.postgres_db]):
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+        if all([
+            self.POSTGRES_USER,
+            self.POSTGRES_PASSWORD,
+            self.POSTGRES_HOST,
+            self.POSTGRES_DB
+        ]):
             return (
-                f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}"
-                f"@{self.postgres_host}:{self.postgres_port or 5432}/{self.postgres_db}"
+                f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
+                f"@{self.POSTGRES_HOST}:{self.POSTGRES_PORT or 5432}/{self.POSTGRES_DB}"
             )
         raise ValueError("No se pudo construir la cadena de conexión a la base de datos.")
 
-# Instancia global (usa cache automático)
+
+# Instancia global
 settings = Settings()

@@ -3,10 +3,11 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-from app.config.settings import settings
 from sqlmodel import SQLModel
 
-DATABASE_URL = settings.database_url
+
+# Usar la URL de Railway directamente o construirla si no existe
+DATABASE_URL = settings.DATABASE_URL or settings.ASYNC_DATABASE_URL
 
 engine = create_async_engine(
     DATABASE_URL,
@@ -19,6 +20,7 @@ AsyncSessionLocal = sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False
 )
+
 
 async def get_db():
     async with AsyncSessionLocal() as session:
