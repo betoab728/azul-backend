@@ -51,12 +51,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
     "http://localhost:4200",                 # desarrollo local
-    "https://azul-gestion-residuos.netlify.app/"             # producción en Netlify
+    "https://azul-gestion-residuos.netlify.app"  # producción en Netlify, sin la barra al final
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,       # <- usar la lista de orígenes permitidos
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
