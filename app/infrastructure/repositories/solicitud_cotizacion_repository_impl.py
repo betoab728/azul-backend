@@ -106,9 +106,9 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                 SolicitudModel.fecha,
                 func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
                 SolicitudModel.observaciones,
-                PuertoModel.nombre.label("puerto"),
+                func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
                 EstadoSolicitudModel.nombre.label("estado_solicitud"),
-                EmbarcacionModel.nombre.label("embarcacion"),
+                func.coalesce(EmbarcacionModel.nombre, "No tiene").label("embarcacion"),
                 GeneradorResiduoModel.razon_social.label("generador"),
                 SolicitudModel.created_at,
                 SolicitudModel.updated_at,
@@ -132,9 +132,9 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                 SolicitudModel.fecha,
                 func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
                 SolicitudModel.observaciones,
-                PuertoModel.nombre.label("puerto"),
+                func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
                 EstadoSolicitudModel.nombre.label("estado_solicitud"),
-                EmbarcacionModel.nombre.label("embarcacion"),
+                func.coalesce(EmbarcacionModel.nombre, "No tiene").label("embarcacion"),
                 GeneradorResiduoModel.razon_social.label("generador"),
                 SolicitudModel.created_at,
                 SolicitudModel.updated_at,
@@ -157,17 +157,17 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                 SolicitudModel.fecha,
                 func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
                 SolicitudModel.observaciones,
-                PuertoModel.nombre.label("puerto"),
+                func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
                 EstadoSolicitudModel.nombre.label("estado_solicitud"),
-                EmbarcacionModel.nombre.label("embarcacion"),
+                func.coalesce(EmbarcacionModel.nombre, "No tiene").label("embarcacion"),
                 GeneradorResiduoModel.razon_social.label("generador"),
                 SolicitudModel.created_at,
                 SolicitudModel.updated_at,
             )
             .join(GeneradorResiduoModel, SolicitudModel.id_generador == GeneradorResiduoModel.id)
-            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id,  isouter=True)
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
-            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)  # 🔹 Opcional
+            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True) 
             .where(GeneradorResiduoModel.id == id_generador)
         )
         rows = result.all()
