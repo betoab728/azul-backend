@@ -13,13 +13,13 @@ class DetalleSolicitudCreateDto(BaseModel):
 
 class SolicitudCotizacionCreateDto(BaseModel):
     fecha: date
-    id_puerto: UUID
+    id_puerto: Optional[UUID] = None
     id_estado_solicitud: UUID
     observaciones: Optional[str] = None
     id_embarcacion: Optional[UUID] = None
     id_generador: Optional[UUID] = None
     direccion_recojo: Optional[str] = None
-    detalles: List[DetalleSolicitudCreateDto]  #  maestro-detalle en un solo JSON
+    detalles: List[DetalleSolicitudCreateDto]  
 
 class SolicitudCotizacionReadDto(BaseModel):
     id: UUID
