@@ -24,10 +24,10 @@ class SolicitudCotizacionCreateDto(BaseModel):
 class SolicitudCotizacionReadDto(BaseModel):
     id: UUID
     fecha: date
-    id_puerto: UUID
+    id_puerto: Optional[UUID] = None
     id_estado_solicitud: UUID
     observaciones: Optional[str]
-    id_embarcacion: Optional[UUID]
+    id_embarcacion: Optional[UUID] = None
     created_at: datetime
     updated_at: datetime
     direccion_recojo: Optional[str] 
