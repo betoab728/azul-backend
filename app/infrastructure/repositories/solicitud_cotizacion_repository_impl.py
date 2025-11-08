@@ -77,26 +77,26 @@ class SolicitudRepositoryImpl(SolicitudRepository):
     
     # ---------- LISTAR TODOS ----------
     async def get_all(self) -> List[SolicitudCotizacionConDatos]:
-        result = await self.session.execute(
-            select(
-                SolicitudModel.id,
-                SolicitudModel.fecha,
-                func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
-                SolicitudModel.observaciones,
-                PuertoModel.nombre.label("puerto"),
-                EstadoSolicitudModel.nombre.label("estado_solicitud"),
-                EmbarcacionModel.nombre.label("embarcacion"),
-                GeneradorResiduoModel.razon_social.label("generador"),
-                SolicitudModel.created_at,
-                SolicitudModel.updated_at,
-            )
-            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id)
-            .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
-            .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
-            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+    result = await self.session.execute(
+        select(
+            SolicitudModel.id,
+            SolicitudModel.fecha,
+            func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
+            SolicitudModel.observaciones,
+            func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
+            EstadoSolicitudModel.nombre.label("estado_solicitud"),
+            func.coalesce(EmbarcacionModel.nombre, "No tiene").label("embarcacion"),
+            func.coalesce(GeneradorResiduoModel.razon_social, "No tiene").label("generador"),
+            SolicitudModel.created_at,
+            SolicitudModel.updated_at,
         )
-        rows = result.all()
-        return [self._row_to_con_datos(row) for row in rows]
+        .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id, isouter=True)
+        .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+        .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)
+        .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id, isouter=True)
+    )
+    rows = result.all()
+    return [self._row_to_con_datos(row) for row in rows]
 
     # ---------- LISTAR POR PUERTO ----------
     async def get_by_puerto(self, id_puerto: UUID) -> List[SolicitudCotizacionConDatos]:
