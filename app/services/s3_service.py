@@ -24,14 +24,14 @@ class S3Service:
 
             #  Subir el archivo directamente con put_object
             self.s3.put_object(
-                Bucket=self.S3_BUCKET_NAME,
+                Bucket=self.bucket_name,
                 Key=key,
                 Body=file_bytes,
                 ContentType="application/pdf"
             )
 
             # Generar URL pública
-            file_url = f"https://{self.S3_BUCKET_NAME}.s3.{settings.AWS_REGION}.amazonaws.com/{key}"
+            file_url = f"https://{self.bucket_name}.s3.{settings.AWS_REGION}.amazonaws.com/{key}"
 
             return {"key": key, "url": file_url}
 
