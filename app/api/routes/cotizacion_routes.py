@@ -38,6 +38,7 @@ async def crear_cotizacion(
         fecha_emision=fecha_emision,
         id_estado_cotizacion=id_estado_cotizacion,
         observaciones=observaciones,
+        id_vehiculo=id_vehiculo,
         pdf_file=pdf_file  # pasar el objeto completo (no .file)
     )
     return {"mensaje": "Cotización creada correctamente", "data": cotizacion}
