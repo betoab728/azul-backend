@@ -23,6 +23,22 @@ from app.api.routes.vehiculo_routes import router as vehiculo_router
 from app.api.routes.orden_traslado_routes import router as orden_traslado_router
 from app.api.routes.trazabilidad_routes import router as trazabilidad_router
 
+
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:4200",                 # desarrollo local
+    "https://azul-gestion-residuos.netlify.app"  # producción en Netlify, sin la barra al final
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,       # <- usar la lista de orígenes permitidos
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app = FastAPI(title="Sistema de Gestión de Residuos")
 app.include_router(ubigeo_router)
 app.include_router(auth_router) 
@@ -47,20 +63,6 @@ app.include_router(orden_traslado_router)
 app.include_router(trazabilidad_router)
 
 
-from fastapi.middleware.cors import CORSMiddleware
-
-origins = [
-    "http://localhost:4200",                 # desarrollo local
-    "https://azul-gestion-residuos.netlify.app"  # producción en Netlify, sin la barra al final
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,       # <- usar la lista de orígenes permitidos
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 @app.get("/")
 def root():
