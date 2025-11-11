@@ -94,6 +94,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
             .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)
             .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id, isouter=True)
+            .order_by(SolicitudModel.created_at.desc())
         )
         rows = result.all()
         return [self._row_to_con_datos(row) for row in rows]
@@ -117,6 +118,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
             .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)
             .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .order_by(SolicitudModel.created_at.desc())
             .where(SolicitudModel.id_puerto == id_puerto)
         )
 
@@ -143,6 +145,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
             .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id)
             .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id)
+            .order_by(SolicitudModel.created_at.desc())
             .where(EmbarcacionModel.id == id_embarcacion)
         )
         rows = result.all()
@@ -168,6 +171,7 @@ class SolicitudRepositoryImpl(SolicitudRepository):
             .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id,  isouter=True)
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
             .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True) 
+            .order_by(SolicitudModel.created_at.desc())
             .where(GeneradorResiduoModel.id == id_generador)
         )
         rows = result.all()

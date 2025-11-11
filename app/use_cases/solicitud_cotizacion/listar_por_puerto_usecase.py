@@ -18,6 +18,7 @@ class ListarPorPuertoUseCase:
                 estado_solicitud=s.estado_solicitud,
                 embarcacion=s.embarcacion,
                 generador=s.generador,
+                created_at=s.created_at,
             )
             for s in solicitudes
         ]

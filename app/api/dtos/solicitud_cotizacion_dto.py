@@ -19,6 +19,7 @@ class SolicitudCotizacionCreateDto(BaseModel):
     id_embarcacion: Optional[UUID] = None
     id_generador: Optional[UUID] = None
     direccion_recojo: Optional[str] = None
+    created_at: Optional[datetime] = None
     detalles: List[DetalleSolicitudCreateDto]  
 
 class SolicitudCotizacionReadDto(BaseModel):
