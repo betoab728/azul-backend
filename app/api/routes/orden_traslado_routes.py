@@ -19,7 +19,7 @@ router = APIRouter(
     dependencies=[Depends(get_current_user)]
 )
 
-@router.get("encabezado", response_model=OrdenEncabezadoDto)
+@router.get("/encabezado", response_model=OrdenEncabezadoDto)
 async def obtener_encabezado_orden(
     current_user: UsuarioToken = Depends(get_current_user),
     session: AsyncSession = Depends(get_db)
