@@ -86,6 +86,7 @@ class SolicitudConDatosReadDto(BaseModel):
     estado_solicitud: str
     embarcacion: str
     generador: str
+    created_at: datetime
 
     @field_serializer("fecha")
     def serialize_fecha(self, value: date) -> str:
