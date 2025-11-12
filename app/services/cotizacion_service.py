@@ -96,7 +96,7 @@ class CotizacionService:
                 GeneradorResiduoModel.ruc,
                 GeneradorResiduoModel.razon_social,
                 GeneradorResiduoModel.direccion,
-                DistritoModel.nombre.label("distrito"),
+                DistritoModel.nombredistrito.label("distrito"),
                 GeneradorResiduoModel.nombre_responsable,
                 GeneradorResiduoModel.telefono,
                 GeneradorResiduoModel.correo,
