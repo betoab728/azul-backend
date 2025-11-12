@@ -83,17 +83,18 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                 SolicitudModel.fecha,
                 func.to_char(SolicitudModel.created_at, "HH24:MI").label("hora"),
                 SolicitudModel.observaciones,
-                func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
                 EstadoSolicitudModel.nombre.label("estado_solicitud"),
+                func.coalesce(PuertoModel.nombre, "No tiene").label("puerto"),
                 func.coalesce(EmbarcacionModel.nombre, "No tiene").label("embarcacion"),
-                func.coalesce(GeneradorResiduoModel.razon_social, "No tiene").label("generador"),
+                GeneradorResiduoModel.razon_social.label("generador"),
                 SolicitudModel.created_at,
                 SolicitudModel.updated_at,
             )
-            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id, isouter=True)
+        
+            .join(GeneradorResiduoModel, SolicitudModel.id_generador == GeneradorResiduoModel.id)
             .join(EstadoSolicitudModel, SolicitudModel.id_estado_solicitud == EstadoSolicitudModel.id)
+            .join(PuertoModel, SolicitudModel.id_puerto == PuertoModel.id, isouter=True)
             .join(EmbarcacionModel, SolicitudModel.id_embarcacion == EmbarcacionModel.id, isouter=True)
-            .join(GeneradorResiduoModel, EmbarcacionModel.id_generador == GeneradorResiduoModel.id, isouter=True)
             .order_by(SolicitudModel.created_at.desc())
         )
         rows = result.all()
