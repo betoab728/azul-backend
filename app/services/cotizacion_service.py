@@ -89,7 +89,7 @@ class CotizacionService:
         rows = result.mappings().all()
         return [CotizacionReadDto(**row) for row in rows]
 
-       async def obtener_generador_por_solicitud(self, id_solicitud: str) -> GeneradorResiduoDetalleDto:
+    async def obtener_generador_por_solicitud(self, id_solicitud: str) -> GeneradorResiduoDetalleDto:
         query = (
             select(
                 GeneradorResiduoModel.id,
