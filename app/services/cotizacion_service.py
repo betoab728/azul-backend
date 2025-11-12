@@ -11,9 +11,11 @@ from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacio
 from app.infrastructure.db.models.embarcacion import Embarcacion as EmbarcacionModel
 from app.infrastructure.db.models.generador_residuo import GeneradorResiduo as GeneradorResiduoModel
 from app.infrastructure.db.models.cotizacion import Cotizacion as CotizacionModel
+from app.infrastructure.db.models.distrito import Distrito as DistritoModel
 from sqlalchemy import func
 from sqlalchemy.sql.sqltypes import String
 from uuid import UUID
+from app.api.dtos.generador_residuo_dto import GeneradorResiduoDetalleDto
 
 class CotizacionService:
     def __init__(self, session: AsyncSession):
@@ -86,3 +88,30 @@ class CotizacionService:
         )
         rows = result.mappings().all()
         return [CotizacionReadDto(**row) for row in rows]
+
+       async def obtener_generador_por_solicitud(self, id_solicitud: str) -> GeneradorResiduoDetalleDto:
+        query = (
+            select(
+                GeneradorResiduoModel.id,
+                GeneradorResiduoModel.ruc,
+                GeneradorResiduoModel.razon_social,
+                GeneradorResiduoModel.direccion,
+                DistritoModel.nombre.label("distrito"),
+                GeneradorResiduoModel.nombre_responsable,
+                GeneradorResiduoModel.telefono,
+                GeneradorResiduoModel.correo,
+                GeneradorResiduoModel.created_at,
+                (case((GeneradorResiduoModel.estado == 1, "Activo"), else_="Inactivo")).label("estado")
+            )
+            .join(SolicitudCotizacionModel, SolicitudCotizacionModel.id_generador == GeneradorResiduoModel.id)
+            .join(DistritoModel, GeneradorResiduoModel.id_distrito == DistritoModel.iddistrito)
+            .where(SolicitudCotizacionModel.id == id_solicitud)
+        )
+
+        result = await self.session.execute(query)
+        row = result.mappings().first()
+
+        if not row:
+            raise HTTPException(status_code=404, detail="No se encontró el generador asociado a esta solicitud")
+
+        return GeneradorResiduoDetalleDto(**row)

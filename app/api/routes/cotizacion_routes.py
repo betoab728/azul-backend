@@ -7,6 +7,7 @@ from app.api.auth import get_current_user  # 🔒 proteger las rutas
 from app.api.dtos.cotizacion_dto import CotizacionReadDto
 from typing import List
 from app.api.dtos.usuario_dto import UsuarioToken
+from app.api.dtos.generador_residuo_dto import GeneradorResiduoDetalleDto
 
 import logging
 
@@ -56,4 +57,10 @@ async def listar_cotizaciones_por_generador(
 ):
     service = CotizacionService(session)
     return await service.listar_cotizaciones_por_generador(current_user.id_generador)
+
+
+@router.get("/generador/{id_solicitud}", response_model=GeneradorResiduoDetalleDto)
+async def obtener_generador_por_solicitud(id_solicitud: str, session: AsyncSession = Depends(get_db)):
+    service = CotizacionService(session)
+    return await service.obtener_generador_por_solicitud(id_solicitud)
 
