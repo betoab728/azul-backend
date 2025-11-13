@@ -16,6 +16,7 @@ from sqlalchemy import func
 from sqlalchemy.sql.sqltypes import String
 from uuid import UUID
 from app.api.dtos.generador_residuo_dto import GeneradorResiduoDetalleDto
+from sqlalchemy import case
 
 class CotizacionService:
     def __init__(self, session: AsyncSession):
