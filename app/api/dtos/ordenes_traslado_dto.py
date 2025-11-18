@@ -35,3 +35,14 @@ class OrdenDocumentosDto(BaseModel):
 
     class Config:
         orm_mode = True
+
+class OrdenConsultaDto(BaseModel):
+    fecha: str
+    serie: str
+    numero: str
+    razon_social: str
+    observaciones: Optional[str]
+    placa: str
+    marca: Optional[str]
+    modelo: Optional[str]
+    direccion_recojo: Optional[str]

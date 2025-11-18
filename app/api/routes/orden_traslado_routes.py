@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from uuid import UUID
 from app.api.auth import get_current_user
 from app.api.dtos.usuario_dto import UsuarioToken
-from app.api.dtos.ordenes_traslado_dto import OrdenEncabezadoDto
+from app.api.dtos.ordenes_traslado_dto import OrdenEncabezadoDto, OrdenConsultaDto
 from app.infrastructure.db.database import get_db
 from sqlmodel.ext.asyncio.session import AsyncSession
 from app.services.orden_traslado_service import OrdenTrasladoService
@@ -94,4 +94,9 @@ async def subir_documento_orden(
     """
     service = OrdenTrasladoService(session)
     return await service.subir_documento(str(id_orden), tipo, file)
+
+@router.get("/buscar/{numero}", response_model=OrdenConsultaDto)
+async def buscar_orden(numero: int, session: AsyncSession = Depends(get_db)):
+    service = OrdenTrasladoService(session)
+    return await service.buscar_por_numero(numero)
 

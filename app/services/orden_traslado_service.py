@@ -12,7 +12,7 @@ from app.infrastructure.db.models.historial_estado_orden import HistorialEstadoO
 from app.infrastructure.db.models.estado_orden import EstadoOrden
 from app.infrastructure.db.models.orden_traslado import OrdenTraslado
 from uuid import uuid4
-from app.api.dtos.ordenes_traslado_dto import OrdenResumenDto
+from app.api.dtos.ordenes_traslado_dto import OrdenResumenDto,OrdenConsultaDto
 from app.infrastructure.db.models.cotizacion import Cotizacion
 from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion
 from app.infrastructure.db.models.generador_residuo import GeneradorResiduo
@@ -189,6 +189,42 @@ class OrdenTrasladoService:
         ]
 
         return ordenes_dto
+
+    async def buscar_por_numero(self, numero: int) -> OrdenConsultaDto:
+        query = (
+            select(
+                OrdenTraslado.fecha,
+                OrdenTraslado.serie,
+                OrdenTraslado.numero,
+                GeneradorResiduo.razon_social,
+                OrdenTraslado.observaciones,
+                Vehiculo.placa,
+                Vehiculo.marca,
+                Vehiculo.modelo,
+                SolicitudCotizacion.direccion_recojo
+            )
+            .join(Cotizacion, Cotizacion.id == OrdenTraslado.id_cotizacion)
+            .join(SolicitudCotizacion, SolicitudCotizacion.id == Cotizacion.id_solicitud)
+            .join(GeneradorResiduo, GeneradorResiduo.id == SolicitudCotizacion.id_generador)
+            .join(Vehiculo, Vehiculo.id == Cotizacion.id_vehiculo)
+            .where(OrdenTraslado.numero == numero)
+        )
+        result = await self.session.exec(query)
+        row = result.first()
+        if not row:
+            raise HTTPException(status_code=404, detail="No se encontró la orden con el número proporcionado")
+            
+        return OrdenConsultaDto(
+            fecha=row.fecha.strftime("%d/%m/%Y"),
+            serie=row.serie,
+            numero=str(row.numero).zfill(6),
+            razon_social=row.razon_social,
+            observaciones=row.observaciones,
+            placa=row.placa,
+            marca=row.marca,
+            modelo=row.modelo,
+            direccion_recojo=row.direccion_recojo
+        )
 
     
     async def obtener_documentos_por_orden(self, id_orden: str) -> OrdenDocumentosDto:
