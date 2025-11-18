@@ -5,6 +5,7 @@ from datetime import date,datetime
 from fastapi import HTTPException
 from app.infrastructure.db.models.correlativo import Correlativo
 from app.infrastructure.db.models.generador_residuo import GeneradorResiduo as GeneradorResiduoModel
+from app.infrastructure.db.models.vehiculo import Vehiculo
 from app.services.correlativo_service import CorrelativoService
 from app.services.s3_service import S3Service
 from fastapi import UploadFile
@@ -213,7 +214,7 @@ class OrdenTrasladoService:
         row = result.first()
         if not row:
             raise HTTPException(status_code=404, detail="No se encontró la orden con el número proporcionado")
-            
+
         return OrdenConsultaDto(
             fecha=row.fecha.strftime("%d/%m/%Y"),
             serie=row.serie,
