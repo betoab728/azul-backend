@@ -16,3 +16,7 @@ class TrazabilidadReadDto(BaseModel):
 
     class Config:
         from_attributes = True
+
+class TrazabilidadMinimalDto(BaseModel):
+    id: UUID
+    fecha_hora: datetime
