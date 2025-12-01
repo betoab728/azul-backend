@@ -37,6 +37,7 @@ class OrdenDocumentosDto(BaseModel):
         orm_mode = True
 
 class OrdenConsultaDto(BaseModel):
+    id: str
     fecha: str
     serie: str
     numero: str

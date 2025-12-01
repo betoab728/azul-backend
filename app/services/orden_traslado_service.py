@@ -194,6 +194,7 @@ class OrdenTrasladoService:
     async def buscar_por_numero(self, numero: int) -> OrdenConsultaDto:
         query = (
             select(
+                OrdenTraslado.id,
                 OrdenTraslado.fecha,
                 OrdenTraslado.serie,
                 OrdenTraslado.numero,
@@ -216,6 +217,7 @@ class OrdenTrasladoService:
             raise HTTPException(status_code=404, detail="No se encontró la orden con el número proporcionado")
 
         return OrdenConsultaDto(
+            id=str(row.id),
             fecha=row.fecha.strftime("%d/%m/%Y"),
             serie=row.serie,
             numero=str(row.numero).zfill(6),
