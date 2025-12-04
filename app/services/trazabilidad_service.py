@@ -27,5 +27,4 @@ class TrazabilidadService:
         result = await self.session.execute(
             select(TrazabilidadOrden).where(TrazabilidadOrden.id_orden == id_orden)
         )
-        trazas = result.scalars().all()
-        return trazas
+       return result.scalars().all()
