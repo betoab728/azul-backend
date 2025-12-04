@@ -10,7 +10,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 @router.post("/login", response_model=TokenDto)
 async def login(
     login_data: UsuarioLoginDto,
-    use_case: LoginUsuarioUseCase = Depends(get_login_usuario_use_case)
+    use_case: Depends(get_login_usuario_use_case)
 ):  
     usuario = await use_case.execute(login_data.nombre, login_data.clave)
     if not usuario:
