@@ -13,6 +13,7 @@ from app.use_cases.rol.listar_roles_usecase import ListarRolesUseCase
 
 from app.use_cases.usuario.crear_usuario_usecase import CrearUsuarioUseCase
 from app.use_cases.usuario.listar_usuarios_usecase import ListarUsuariosUseCase
+from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
 #clasificacion
 from app.infrastructure.repositories.clasificacion_repository_impl import ClasificacionRepositoryImpl
 from app.domain.interfaces.clasificacion_repository import ClasificacionRepository
@@ -62,7 +63,6 @@ def get_listar_usuarios_con_rol_use_case(
 def get_login_usuario_use_case(
     repo: UsuarioRepository = Depends(get_usuario_repository)
 ) -> LoginUsuarioUseCase:
-    from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
     return LoginUsuarioUseCase(repo) 
 
 ##inyecciones para clasificacion
