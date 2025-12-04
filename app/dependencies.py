@@ -61,7 +61,7 @@ def get_listar_usuarios_con_rol_use_case(
 
 def get_login_usuario_use_case(
     repo: UsuarioRepository = Depends(get_usuario_repository)
-) -> 'LoginUsuarioUseCase':
+) -> LoginUsuarioUseCase:
     from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
     return LoginUsuarioUseCase(repo) 
 
