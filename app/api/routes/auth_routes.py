@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from datetime import timedelta
 from app.api.auth import crear_token_de_acceso
 from app.use_cases.usuario.login_usuario_usecase import LoginUsuarioUseCase
-from app.dependencies_folder.dependencies import get_login_usuario_use_case
+from app.dependencies import get_login_usuario_use_case
 from app.api.dtos.usuario_dto import UsuarioLoginDto, TokenDto
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
