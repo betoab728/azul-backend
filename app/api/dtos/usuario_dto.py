@@ -21,8 +21,9 @@ class UsuarioReadDto(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    class Config:
-        orm_mode = True  # Permite que el modelo funcione con SQLModel y SQLAlchemy
+    model_config = {
+        "from_attributes": True
+    }
 
 class UsuarioLoginDto(BaseModel):
     nombre: str
