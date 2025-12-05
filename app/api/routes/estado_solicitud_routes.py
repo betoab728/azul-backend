@@ -6,6 +6,7 @@ from app.api.dtos.estado_solicitud_dto import EstadoSolicitudReadDto
 from app.use_cases.estado_solicitud.listar_usecase import ListarEstadosSolicitudUseCase
 from app.dependencies_folder.estado_solicitud_dependencies import get_listar_estados_use_case
 
+
 router = APIRouter(
     prefix="/estados-solicitud",
     tags=["Estados de Solicitud"],

@@ -3,7 +3,7 @@ from typing import List
 from app.api.auth import get_current_user
 from app.api.dtos.estado_orden_dto import EstadoOrdenReadDto
 from app.services.estado_orden_service import EstadoOrdenService
-
+from app.infrastructure.db.database import get_db
 
 router = APIRouter(
     prefix="/estados-orden",
