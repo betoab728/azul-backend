@@ -1,6 +1,6 @@
 from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.infrastructure.db.models.historial_estado import HistorialEstadoOrden
+from app.infrastructure.db.models.historial_estado_orden import HistorialEstadoOrden
 from uuid import UUID
 from datetime import datetime
 
