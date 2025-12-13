@@ -19,7 +19,7 @@ async def cambiar_estado_orden(
     data: HistorialEstadoOrdenCreateDto,
     session: AsyncSession = Depends(get_db)
 ):
-    service = HistorialEstadoOrdenService(session)
+    service = HistorialEstadoService(session)
 
     historial = await service.registrar_cambio_estado(
         id_orden=data.id_orden,
