@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from app.infrastructure.db.database import get_db
 from app.services.historial_estado_service import HistorialEstadoService
-from app.api.dtos.stado_orden_dto import HistorialEstadoOrdenCreateDto
+from app.api.dtos.estado_orden_dto import HistorialEstadoOrdenCreateDto
 from app.api.auth import get_current_user
 
 
