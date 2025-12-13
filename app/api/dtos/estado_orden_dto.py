@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from uuid import UUID
 from datetime import datetime
+from typing import Optional
 
 class EstadoOrdenCreateDto(BaseModel):
     nombre: str
