@@ -21,7 +21,7 @@ async def cambiar_estado_orden(
 ):
     service = HistorialEstadoService(session)
 
-    historial = await service.registrar_cambio_estado(
+    historial = await service.crear_historial(
         id_orden=data.id_orden,
         id_estado=data.id_estado,
         observaciones=data.observaciones
