@@ -12,3 +12,8 @@ class EstadoOrdenReadDto(BaseModel):
 
     class Config:
         orm_mode = True
+
+class HistorialEstadoOrdenCreateDto(BaseModel):
+    id_orden: UUID
+    id_estado: UUID
+    observaciones: Optional[str] = None
