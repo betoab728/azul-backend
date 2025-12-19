@@ -102,7 +102,7 @@ async def buscar_orden(numero: int, session: AsyncSession = Depends(get_db)):
     service = OrdenTrasladoService(session)
     return await service.buscar_por_numero(numero)
 
-@router.get("/ordenes/{id_orden}/timeline",response_model=List[TimelineEstadoDto])
+@router.get("/{id_orden}/timeline",response_model=List[TimelineEstadoDto])
 async def obtener_timeline_orden(
     id_orden: UUID,
     session: AsyncSession = Depends(get_db)
