@@ -12,7 +12,7 @@ from app.api.dtos.ordenes_traslado_dto import OrdenResumenDto
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
 from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
 from app.services.historial_estado_service import HistorialEstadoService
-frrom app.api.dtos.estado_orden_dto import TimelineEstadoDto
+from app.api.dtos.estado_orden_dto import TimelineEstadoDto
 
 
 router = APIRouter(
