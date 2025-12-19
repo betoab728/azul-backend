@@ -11,6 +11,7 @@ from typing import List
 from app.api.dtos.ordenes_traslado_dto import OrdenResumenDto
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
 from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
+from app.services.historial_estado_service import HistorialEstadoService
 
 
 router = APIRouter(
@@ -99,4 +100,14 @@ async def subir_documento_orden(
 async def buscar_orden(numero: int, session: AsyncSession = Depends(get_db)):
     service = OrdenTrasladoService(session)
     return await service.buscar_por_numero(numero)
+
+@router.get("/ordenes/{id_orden}/timeline",response_model=List[TimelineEstadoDto])
+async def obtener_timeline_orden(
+    id_orden: UUID,
+    session: AsyncSession = Depends(get_db)
+):
+    service = HistorialEstadoService(session)
+    return await service.obtener_timeline_por_orden(id_orden)
+
+
 

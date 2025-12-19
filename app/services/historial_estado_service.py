@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.infrastructure.db.models.historial_estado_orden import HistorialEstadoOrden
 from uuid import UUID
 from datetime import datetime
+from app.infrastructure.db.models.estado_orden import EstadoOrden
+from app.api.dtos.estado_orden_dto import TimelineEstadoDto
 
 
 class HistorialEstadoService:
@@ -34,3 +36,33 @@ class HistorialEstadoService:
         await self.session.refresh(nuevo_historial)
 
         return nuevo_historial
+
+    #Obtener el timeline de estados para una orden específica
+    async def obtener_timeline_por_orden(
+        self,
+        id_orden: UUID
+    ) -> list[TimelineEstadoDto]:
+
+        stmt = (
+            select(
+                HistorialEstadoOrden.fecha_hora,
+                EstadoOrden.nombre,
+                EstadoOrden.descripcion,
+                HistorialEstadoOrden.observaciones
+            )
+            .join(EstadoOrden, HistorialEstadoOrden.id_estado == EstadoOrden.id)
+            .where(HistorialEstadoOrden.id_orden == id_orden)
+            .order_by(HistorialEstadoOrden.fecha_hora.asc())
+        )
+
+        result = await self.session.execute(stmt)
+
+        return [
+            TimelineEstadoDto(
+                fecha_hora=row.fecha_hora,
+                estado=row.nombre,
+                descripcion=row.descripcion,
+                observaciones=row.observaciones
+            )
+            for row in result.all()
+        ]

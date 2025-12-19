@@ -18,3 +18,9 @@ class HistorialEstadoOrdenCreateDto(BaseModel):
     id_orden: UUID
     id_estado: UUID
     observaciones: Optional[str] = None
+
+class TimelineEstadoDto(BaseModel):
+    fecha_hora: datetime
+    estado: str
+    descripcion: Optional[str]
+    observaciones: Optional[str]
