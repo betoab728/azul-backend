@@ -5,7 +5,6 @@ def nueva_orden_html(numero_orden: str) -> str:
     <p><strong>N° Orden:</strong> {numero_orden}</p>
     <p>Ingrese al sistema para revisar el detalle.</p>
     """
-
 #nueva solicitud de cotizacion
 def nueva_solicitud_cotizacion_html(numero_solicitud: str) -> str:
     return f"""

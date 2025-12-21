@@ -50,7 +50,6 @@ class CrearSolicitudUseCase:
         except Exception as e:
             print("No se pudo enviar correo:", e)
 
-
         # 4 Armar respuesta DTO
         return SolicitudCotizacionReadDto(
             id=creada.id,
