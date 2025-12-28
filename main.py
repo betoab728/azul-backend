@@ -24,9 +24,10 @@ from app.api.routes.orden_traslado_routes import router as orden_traslado_router
 from app.api.routes.trazabilidad_routes import router as trazabilidad_router
 from app.api.routes.estado_orden_routes import router as estado_orden_router
 from app.api.routes.historial_orden_routes import router as historial_orden_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
-from fastapi.middleware.cors import CORSMiddleware
+
 
 origins = [
     "http://localhost:4200",                 # desarrollo local
