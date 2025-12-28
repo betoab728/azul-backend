@@ -3,6 +3,8 @@ from app.config.settings import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from fastapi import HTTPException
+from fastapi.concurrency import run_in_threadpool
+
 
 class EmailService:
 
@@ -17,20 +19,24 @@ class EmailService:
             raise RuntimeError("SENDGRID_API_KEY no configurado")
 
     async def enviar_email(
-        self,
-        to_email: str,
-        subject: str,
-        html_content: str
-    ):
-        message = Mail(
-            from_email=(self.from_email, self.from_name),
-            to_emails=to_email,
-            subject=subject,
-            html_content=html_content
-        )
+    self,
+    to_email: str,
+    subject: str,
+    html_content: str
+):
+    if not self.api_key:
+        print("SENDGRID_API_KEY no configurado, no se envía el email, regresando...")
+        return
 
-        try:
-            sg = SendGridAPIClient(self.api_key)
-            sg.send(message)
-        except Exception as e:
-             print("Error enviando email:", str(e))
+    message = Mail(
+        from_email=(self.from_email, self.from_name),
+        to_emails=to_email,
+        subject=subject,
+        html_content=html_content
+    )
+
+    try:
+        sg = SendGridAPIClient(self.api_key)
+        await run_in_threadpool(sg.send, message)
+    except Exception as e:
+        print("Error enviando email:", e)
