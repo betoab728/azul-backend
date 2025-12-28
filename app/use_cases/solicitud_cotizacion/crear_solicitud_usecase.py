@@ -41,7 +41,17 @@ class CrearSolicitudUseCase:
         # 3Persistir usando repositorio
         creada = await self.solicitud_repository.create(solicitud, detalles)
         # Enviar correo de notificación (NO debe romper la operación)
-       
+        try:
+            email_service = EmailService()
+            await email_service.enviar_email(
+                to_email="azulsostenibleoficial@gmail.com",
+                subject="Nueva Solicitud de Cotización Registrada",
+                html_content=nueva_solicitud_cotizacion_html(creada.id)
+            )
+        except Exception as e:
+            # no romper el flujo de negocio
+            print("Error enviando notificación:", e)  
+    
 
         # 4 Armar respuesta DTO
         return SolicitudCotizacionReadDto(
