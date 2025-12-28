@@ -10,7 +10,7 @@ from app.infrastructure.email.templates import nueva_solicitud_cotizacion_html
 class CrearSolicitudUseCase:
     def __init__(self, solicitud_repository: SolicitudRepository):
         self.solicitud_repository = solicitud_repository
-        self.email_service = EmailService()
+       # self.email_service = EmailService()
 
     async def execute(self, dto: SolicitudCotizacionCreateDto) -> SolicitudCotizacionReadDto:
         # 1 Construir entidad de dominio (cabecera)
