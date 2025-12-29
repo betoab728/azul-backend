@@ -19,24 +19,24 @@ class EmailService:
             raise RuntimeError("SENDGRID_API_KEY no configurado")
 
     async def enviar_email(
-    self,
-    to_email: str,
-    subject: str,
-    html_content: str
-):
-    if not self.api_key:
-        print("SENDGRID_API_KEY no configurado, no se envía el email, regresando...")
-        return
+        self,
+        to_email: str,
+        subject: str,
+        html_content: str
+    ):  
+        if not self.api_key:
+            print("SENDGRID_API_KEY no configurado, no se envía el email, regresando...")
+            return
 
-    message = Mail(
-        from_email=(self.from_email, self.from_name),
-        to_emails=to_email,
-        subject=subject,
-        html_content=html_content
-    )
+        message = Mail(
+            from_email=(self.from_email, self.from_name),
+            to_emails=to_email,
+            subject=subject,
+            html_content=html_content
+        )
 
-    try:
-        sg = SendGridAPIClient(self.api_key)
-        await run_in_threadpool(sg.send, message)
-    except Exception as e:
-        print("Error enviando email:", e)
+        try:
+            sg = SendGridAPIClient(self.api_key)
+            await run_in_threadpool(sg.send, message)
+        except Exception as e:
+            print("Error enviando email:", e)
