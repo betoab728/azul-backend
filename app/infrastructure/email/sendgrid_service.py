@@ -12,7 +12,7 @@ class EmailService:
         self.from_name = settings.MAIL_FROM_NAME
         self.api_key = settings.SENDGRID_API_KEY
         self.from_email = settings.MAIL_FROM
-        
+        self.s3_bucket= settings.S3_BUCKET_NAME
 
          # Verificar que la clave API esté configurada
         if not self.from_name:
@@ -26,6 +26,10 @@ class EmailService:
         if not self.api_key:
             print("WARNING: SENDGRID_API_KEY no configurado, los emails no se enviarán 19.")
             #raise RuntimeError("SENDGRID_API_KEY no configurado")
+        
+        if not self.s3_bucket:
+            print("WARNING: S3_BUCKET_NAME no configurado, los emails no se enviarán.")
+            #raise RuntimeError("S3_BUCKET_NAME no configurado")
 
     async def enviar_email(
         self,
