@@ -44,7 +44,7 @@ class CrearSolicitudUseCase:
         try:
             email_service = EmailService()
             await email_service.enviar_email(
-                to_email="azulsostenibleoficial@gmail.com",
+                to_email="betoab728@gmail.com",
                 subject="Nueva Solicitud de Cotización Registrada",
                 html_content=nueva_solicitud_cotizacion_html(creada.id)
             )
