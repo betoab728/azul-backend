@@ -16,7 +16,8 @@ class EmailService:
          # Verificar que la clave API esté configurada
 
         if not self.api_key:
-            raise RuntimeError("SENDGRID_API_KEY no configurado")
+            print("WARNING: SENDGRID_API_KEY no configurado, los emails no se enviarán 19.")
+            #raise RuntimeError("SENDGRID_API_KEY no configurado")
 
     async def enviar_email(
         self,
