@@ -9,11 +9,19 @@ from fastapi.concurrency import run_in_threadpool
 class EmailService:
 
     def __init__(self):
+        self.from_name = settings.MAIL_FROM_NAME
         self.api_key = settings.SENDGRID_API_KEY
         self.from_email = settings.MAIL_FROM
-        self.from_name = settings.MAIL_FROM_NAME
+        
 
          # Verificar que la clave API esté configurada
+        if not self.from_name:
+            print("WARNING: MAIL_FROM_NAME no configurado, los emails no se enviarán.")
+            #raise RuntimeError("MAIL_FROM_NAME no configurado")
+
+        if not self.from_email:
+            print("WARNING: MAIL_FROM no configurado, los emails no se enviarán.")
+            #raise RuntimeError("MAIL_FROM no configurado")
 
         if not self.api_key:
             print("WARNING: SENDGRID_API_KEY no configurado, los emails no se enviarán 19.")
