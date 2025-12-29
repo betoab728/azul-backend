@@ -30,6 +30,8 @@ class EmailService:
         if not self.s3_bucket:
             print("WARNING: S3_BUCKET_NAME no configurado, los emails no se enviarán.")
             #raise RuntimeError("S3_BUCKET_NAME no configurado")
+        else:
+            print(f"S3_BUCKET_NAME configurado: {self.s3_bucket}")
 
     async def enviar_email(
         self,
