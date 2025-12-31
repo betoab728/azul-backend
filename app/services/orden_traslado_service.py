@@ -20,6 +20,8 @@ from app.infrastructure.db.models.generador_residuo import GeneradorResiduo
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
 from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
 from uuid import UUID
+from app.infrastructure.email.templates import nueva_orden_html
+from app.infrastructure.email.sendgrid_service import SendGridEmailService as EmailService
 
 class OrdenTrasladoService:
     def __init__(self, session: AsyncSession):
@@ -113,6 +115,21 @@ class OrdenTrasladoService:
         #  Guardar todo en una transacción
         await self.session.commit()
         await self.session.refresh(nueva_orden)
+
+        # Enviar correo de notificación usando SendGrid
+        html_content = nueva_orden_html(str(nueva_orden.id))
+
+        try:
+            email_service = EmailService()
+            await email_service.enviar_email(
+            to_email="azulsostenibleoficial@gmail.com",
+            subject="Nueva Orden de Servicio",
+            html_content=html_content
+
+            )
+        except Exception as e:
+            print("Error enviando email de notificación:", e)
+
         return nueva_orden
 
     #Listar órdenes de traslado por cotización

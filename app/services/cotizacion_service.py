@@ -17,6 +17,9 @@ from sqlalchemy.sql.sqltypes import String
 from uuid import UUID
 from app.api.dtos.generador_residuo_dto import GeneradorResiduoDetalleDto
 from sqlalchemy import case
+from app.infrastructure.email.sendgrid_service import SendGridEmailService as EmailService
+from app.infrastructure.email.templates import nueva_cotizacion_html
+from app.infrastructure.repositories.notificacion_repository import NotificacionRepository
 
 class CotizacionService:
     def __init__(self, session: AsyncSession):
@@ -45,6 +48,27 @@ class CotizacionService:
         self.session.add(nueva_cotizacion)
         await self.session.commit()
         await self.session.refresh(nueva_cotizacion)
+
+         # Enviar correo de notificación usando SendGrid
+        html_content = nueva_cotizacion_html(str(nueva_cotizacion.id))
+
+        correo_cliente = await NotificacionRepository(self.session).obtener_correo_generador(id_solicitud)
+
+        
+        if correo_cliente:
+        
+            try:
+                email_service = EmailService()
+                await email_service.enviar_email(
+                to_email=correo_cliente,
+                subject="Nueva Cotización",
+                html_content=html_content
+
+                )
+            except Exception as e:
+                print("Error enviando email de notificación:", e)
+
+
         return nueva_cotizacion
     
     async def listar_cotizaciones(self):
