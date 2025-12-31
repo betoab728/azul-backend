@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     #GMAIL
     SMTP_USER: str | None = None
     SMTP_PASSWORD: str | None = None
+    SMTP_HOST: str | None = None
+    SMTP_PORT: str | None = None
 
     class Config:
         env_file = ".env"
