@@ -19,7 +19,7 @@ class GmailEmailService:
         msg.attach(MIMEText(html_content, "html"))
 
         try:
-            with smtplib.SMTP(settings.SMTP_HOST, int(settings.SMTP_PORT)) as server:
+            with smtplib.SMTP('smtp.gmail.com', 587) as server:
                 server.starttls()
                 server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
                 server.sendmail(
