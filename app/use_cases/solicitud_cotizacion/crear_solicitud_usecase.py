@@ -4,8 +4,8 @@ from typing import List
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion, DetalleSolicitud
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
 from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto, DetalleSolicitudCreateDto,DetalleSolicitudCreateReadDto
-#from app.infrastructure.email.sendgrid_service import EmailService
-from app.infrastructure.email.gmail_service import GmailEmailService as EmailService
+from app.infrastructure.email.sendgrid_service import EmailService
+#from app.infrastructure.email.gmail_service import GmailEmailService as EmailService
 from app.infrastructure.email.templates import nueva_solicitud_cotizacion_html
 
 class CrearSolicitudUseCase:
@@ -41,17 +41,21 @@ class CrearSolicitudUseCase:
 
         # 3Persistir usando repositorio
         creada = await self.solicitud_repository.create(solicitud, detalles)
-        # Enviar correo de notificación (NO debe romper la operación)
+        # Enviar correo de notificación usando SendGrid
+        
+        html_content = nueva_solicitud_cotizacion_html(str(creada.id))
+
         try:
             email_service = EmailService()
-            await email_service.enviar_email(
-                to_email="betoab728@gmail.com",
-                subject="Nueva Solicitud de Cotización Registrada",
-                html_content=nueva_solicitud_cotizacion_html(creada.id)
+            email_service.enviar_email(
+                to_email="azulsostenibleoficial@gmail.com",
+                subject="Nueva Solicitud de Cotización",
+                html_content=html_content
+
             )
         except Exception as e:
-            # no romper el flujo de negocio
-            print("Error enviando notificación:", e)  
+            print("Error enviando email de notificación:", e)
+
     
 
         # 4 Armar respuesta DTO
