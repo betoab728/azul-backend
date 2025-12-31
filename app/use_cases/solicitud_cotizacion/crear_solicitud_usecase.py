@@ -47,10 +47,10 @@ class CrearSolicitudUseCase:
 
         try:
             email_service = EmailService()
-            email_service.enviar_email(
-                to_email="azulsostenibleoficial@gmail.com",
-                subject="Nueva Solicitud de Cotización",
-                html_content=html_content
+            await email_service.enviar_email(
+            to_email="azulsostenibleoficial@gmail.com",
+            subject="Nueva Solicitud de Cotización",
+            html_content=html_content
 
             )
         except Exception as e:
