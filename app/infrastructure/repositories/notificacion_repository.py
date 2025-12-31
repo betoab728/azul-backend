@@ -1,8 +1,8 @@
 from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.infrastructure.db.models import (
-    SolicitudCotizacion,
-    GeneradorResiduo
+    solicitud_cotizacion as SolicitudCotizacion,
+    generador_residuo as GeneradorResiduo
 )
 from uuid import UUID
 
