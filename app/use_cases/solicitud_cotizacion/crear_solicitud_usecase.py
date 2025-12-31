@@ -4,7 +4,8 @@ from typing import List
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion, DetalleSolicitud
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
 from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto, DetalleSolicitudCreateDto,DetalleSolicitudCreateReadDto
-from app.infrastructure.email.sendgrid_service import EmailService
+#from app.infrastructure.email.sendgrid_service import EmailService
+from app.infrastructure.email.gmail_service import GmailEmailService as EmailService
 from app.infrastructure.email.templates import nueva_solicitud_cotizacion_html
 
 class CrearSolicitudUseCase:

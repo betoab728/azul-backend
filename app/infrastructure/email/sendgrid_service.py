@@ -1,12 +1,11 @@
-#import os
+
 from app.config.settings import settings
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from fastapi import HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-
-class EmailService:
+class SendGridEmailService:
 
     def __init__(self):
         self.from_name = settings.MAIL_FROM_NAME

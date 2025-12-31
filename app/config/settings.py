@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     SENDGRID_API_KEY: str | None = None
     MAIL_FROM: str | None = None
     MAIL_FROM_NAME: str | None = None
+    #GMAIL
+    SMTP_USER: str | None = None
+    SMTP_PASSWORD: str | None = None
 
     class Config:
         env_file = ".env"
