@@ -10,6 +10,16 @@ class GmailEmailService:
         if not settings.SMTP_USER or not settings.SMTP_PASSWORD:
             print("credenciales SMTP no configurado")
             return
+        
+        if not all([
+            settings.SMTP_HOST,
+            settings.SMTP_PORT,
+            settings.SMTP_USER,
+            settings.SMTP_PASSWORD
+        ]):
+            print("SMTP incompleto, no se envía email")
+            return
+
 
         msg = MIMEMultipart("alternative")
         msg["From"] = f"{settings.MAIL_FROM_NAME} <{settings.MAIL_FROM}>"
