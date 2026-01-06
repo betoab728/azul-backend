@@ -1,10 +1,10 @@
 from sqlmodel import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.infrastructure.db.models import (
-    solicitud_cotizacion as SolicitudCotizacion,
-    generador_residuo as GeneradorResiduo
-)
 from uuid import UUID
+
+from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion
+from app.infrastructure.db.models.generador_residuo import GeneradorResiduo
+
 
 class NotificacionRepository:
 
@@ -21,5 +21,5 @@ class NotificacionRepository:
             .where(SolicitudCotizacion.id == id_solicitud)
         )
 
-        result = await self.session.execute(stmt)
+        result = await self.session.exec(stmt)
         return result.scalar_one_or_none()
