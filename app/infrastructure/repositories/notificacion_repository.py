@@ -22,4 +22,4 @@ class NotificacionRepository:
         )
 
         result = await self.session.exec(stmt)
-        return result.scalar_one_or_none()
+        return result.first()
