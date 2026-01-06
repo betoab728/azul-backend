@@ -55,17 +55,17 @@ class CotizacionService:
         correo_cliente = await NotificacionRepository(self.session).obtener_correo_generador(id_solicitud)
 
         
-      # if correo_cliente:
-        try:
-            email_service = EmailService()
-            await email_service.enviar_email(
-            to_email="azulsostenibleoficial@gmail.com",
-            subject="Nueva Cotización",
-            html_content=html_content
+        if correo_cliente:
+            try:
+                email_service = EmailService()
+                await email_service.enviar_email(
+                to_email=correo_cliente,
+                subject="Nueva Cotización de Azul Sostenible",
+                html_content=html_content
 
-            )
-        except Exception as e:
-            print("Error enviando email de notificación:", e)         
+                )
+            except Exception as e:
+                print("Error enviando email de notificación:", e)         
             
 
 
