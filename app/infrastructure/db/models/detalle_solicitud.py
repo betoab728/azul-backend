@@ -1,4 +1,4 @@
-"""from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship
 from typing import Optional
 from uuid import UUID, uuid4
 from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion
@@ -12,4 +12,4 @@ class DetalleSolicitud(SQLModel, table=True):
     id_residuo: UUID = Field(foreign_key="registro_residuo.id")
     cantidad: float
      # relación inversa
-    solicitud: Optional[SolicitudCotizacion] = Relationship(back_populates="detalles")"""
+    solicitud: Optional[SolicitudCotizacion] = Relationship(back_populates="detalles")

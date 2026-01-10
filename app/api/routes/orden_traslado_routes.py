@@ -13,6 +13,7 @@ from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
 from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
 from app.services.historial_estado_service import HistorialEstadoService
 from app.api.dtos.estado_orden_dto import TimelineEstadoDto
+from app.api.dtos.orden_residuo_detalle_dto import OrdenResiduoDetalleDto
 
 
 router = APIRouter(
@@ -109,6 +110,18 @@ async def obtener_timeline_orden(
 ):
     service = HistorialEstadoService(session)
     return await service.obtener_timeline_por_orden(id_orden)
+
+@router.get(
+    "/{id_orden}/residuos",
+    response_model=List[OrdenResiduoDetalleDto]
+)
+async def obtener_residuos_de_orden(
+    id_orden: str,
+    session: AsyncSession = Depends(get_db),
+    current_user: UsuarioToken = Depends(get_current_user)
+):
+    service = OrdenTrasladoService(session)
+    return await service.obtener_residuos_por_orden(id_orden)
 
 
 

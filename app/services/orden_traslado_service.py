@@ -12,9 +12,12 @@ from fastapi import UploadFile
 from app.infrastructure.db.models.historial_estado_orden import HistorialEstadoOrden
 from app.infrastructure.db.models.estado_orden import EstadoOrden
 from app.infrastructure.db.models.orden_traslado import OrdenTraslado
+from app.infrastructure.db.models.cotizacion import Cotizacion
+from app.infrastructure.db.models.detalle_solicitud import DetalleSolicitud
+from app.infrastructure.db.models.registro_residuo import RegistroResiduo
+from app.infrastructure.db.models.unidad_medida import UnidadMedida
 from uuid import uuid4
 from app.api.dtos.ordenes_traslado_dto import OrdenResumenDto,OrdenConsultaDto
-from app.infrastructure.db.models.cotizacion import Cotizacion
 from app.infrastructure.db.models.solicitud_cotizacion import SolicitudCotizacion
 from app.infrastructure.db.models.generador_residuo import GeneradorResiduo
 from app.infrastructure.db.models.orden_documentos import OrdenDocumentos
@@ -22,6 +25,7 @@ from app.api.dtos.ordenes_traslado_dto import OrdenDocumentosDto
 from uuid import UUID
 from app.infrastructure.email.templates import nueva_orden_html
 from app.infrastructure.email.sendgrid_service import SendGridEmailService as EmailService
+from app.api.dtos.orden_residuo_detalle_dto import OrdenResiduoDetalleDto
 
 class OrdenTrasladoService:
     def __init__(self, session: AsyncSession):
@@ -339,4 +343,37 @@ class OrdenTrasladoService:
             "url": file_url,
             "id_orden": id_orden,
         }
+    
+    async def obtener_residuos_por_orden(self, id_orden: str):
+        stmt = (
+            select(
+                RegistroResiduo.nombre_residuo,
+                DetalleSolicitud.cantidad,
+                UnidadMedida.nombre
+            )
+            .join(DetalleSolicitud, DetalleSolicitud.id_residuo == RegistroResiduo.id)
+            .join(SolicitudCotizacion, SolicitudCotizacion.id == DetalleSolicitud.id_solicitud)
+            .join(Cotizacion, Cotizacion.id_solicitud == SolicitudCotizacion.id)
+            .join(OrdenTraslado, OrdenTraslado.id_cotizacion == Cotizacion.id)
+            .join(UnidadMedida, UnidadMedida.id == RegistroResiduo.id_unidad)
+            .where(OrdenTraslado.id == id_orden)
+        )
+
+        result = await self.session.exec(stmt)
+        rows = result.all()
+
+        if not rows:
+            raise HTTPException(
+                status_code=404,
+                detail="No se encontraron residuos para esta orden"
+            )
+
+        return [
+            OrdenResiduoDetalleDto(
+                nombre_residuo=r[0],
+                cantidad=r[1],
+                unidad=r[2]
+            )
+            for r in rows
+        ]
 
