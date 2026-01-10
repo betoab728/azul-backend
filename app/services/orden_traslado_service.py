@@ -13,7 +13,7 @@ from app.infrastructure.db.models.historial_estado_orden import HistorialEstadoO
 from app.infrastructure.db.models.estado_orden import EstadoOrden
 from app.infrastructure.db.models.orden_traslado import OrdenTraslado
 from app.infrastructure.db.models.cotizacion import Cotizacion
-from app.infrastructure.db.models.detalle_solicitud import DetalleSolicitud
+from app.infrastructure.db.models.solicitud_cotizacion import DetalleSolicitud
 from app.infrastructure.db.models.registro_residuo import RegistroResiduo
 from app.infrastructure.db.models.unidad_medida import UnidadMedida
 from uuid import uuid4
