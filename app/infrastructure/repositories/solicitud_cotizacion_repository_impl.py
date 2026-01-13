@@ -44,7 +44,8 @@ class SolicitudRepositoryImpl(SolicitudRepository):
                     id=det.id,
                     id_solicitud=db_solicitud.id,
                     id_residuo=det.id_residuo,
-                    cantidad=det.cantidad
+                    cantidad=det.cantidad,
+                    volumen=det.volumen
                 )
                 self.session.add(db_det)
 

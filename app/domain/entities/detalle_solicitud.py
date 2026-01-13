@@ -10,9 +10,11 @@ class DetalleSolicitud:
                  id: UUID, 
                  id_solicitud: UUID, 
                  id_residuo: UUID, 
-                 cantidad: Decimal):
+                 cantidad: Decimal,
+                 volumen: Decimal):
         self.id = id
         self.id_solicitud = id_solicitud
         self.id_residuo = id_residuo
         self.cantidad = cantidad 
+        self.volumen = volumen
     
