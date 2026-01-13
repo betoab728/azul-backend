@@ -19,6 +19,7 @@ class DetalleSolicitudService:
             select(
                 RegistroResiduo.nombre_residuo.label("residuo"),
                 DetalleSolicitud.cantidad,
+                DetalleSolicitud.volumen,
                 UnidadMedida.nombre.label("unidad"),
             )
             .join(DetalleSolicitud, DetalleSolicitud.id_residuo == RegistroResiduo.id)
@@ -33,6 +34,7 @@ class DetalleSolicitudService:
             DetalleSolicitudReadDto(
                 residuo=row.residuo,
                 cantidad=row.cantidad,
+                voluemn=row.volumen,
                 unidad=row.unidad
             )
             for row in rows
