@@ -9,6 +9,7 @@ from pydantic import field_serializer
 class DetalleSolicitudCreateDto(BaseModel):
     id_residuo: UUID
     cantidad: float
+    volumen: float
 
 
 class SolicitudCotizacionCreateDto(BaseModel):
@@ -42,6 +43,7 @@ class DetalleSolicitudCreateReadDto(BaseModel):
     id: UUID
     id_residuo: UUID
     cantidad: float
+    volumen: float
 
     class Config:
         orm_mode = True
@@ -50,6 +52,7 @@ class DetalleSolicitudReadDto(BaseModel):
     residuo: str
     cantidad: float
     unidad: str
+    volumen:float
 
 class SolicitudCotizacionDetalleDto(BaseModel):
     id: UUID
@@ -73,6 +76,7 @@ class DetalleSolicitudConDatosReadDto(BaseModel):
     id: UUID
     residuo: str
     cantidad: float
+    volumen: float
     class Config:
         orm_mode = True
 

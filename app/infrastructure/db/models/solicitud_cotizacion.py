@@ -29,6 +29,7 @@ class DetalleSolicitud(SQLModel, table=True):
     id_solicitud: UUID = Field(foreign_key="solicitud_cotizacion.id")
     id_residuo: UUID = Field(foreign_key="registro_residuo.id")
     cantidad: float
+    volumen:float
 
     # relación inversa
     solicitud: Optional[SolicitudCotizacion] = Relationship(back_populates="detalles")

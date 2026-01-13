@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List
 from app.domain.entities.solicitud_cotizacion import SolicitudCotizacion, DetalleSolicitud
 from app.domain.interfaces.solicitud_cotizacion_repository import SolicitudRepository
-from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto, DetalleSolicitudCreateDto,DetalleSolicitudCreateReadDto
+from app.api.dtos.solicitud_cotizacion_dto import SolicitudCotizacionCreateDto, SolicitudCotizacionReadDto,DetalleSolicitudCreateReadDto
 from app.infrastructure.email.sendgrid_service import SendGridEmailService as EmailService
 #from app.infrastructure.email.gmail_service import GmailEmailService as EmailService
 from app.infrastructure.email.templates import nueva_solicitud_cotizacion_html
@@ -34,7 +34,8 @@ class CrearSolicitudUseCase:
                 id=uuid4(),
                 id_solicitud=solicitud.id,
                 id_residuo=item.id_residuo,
-                cantidad=item.cantidad
+                cantidad=item.cantidad,
+                volumen=item.volumen
             )
             for item in dto.detalles
         ]
@@ -73,7 +74,8 @@ class CrearSolicitudUseCase:
                 DetalleSolicitudCreateReadDto(
                     id=det.id,
                     id_residuo=det.id_residuo,
-                    cantidad=det.cantidad
+                    cantidad=det.cantidad,
+                    volumen = det.volumen
                 )
                 for det in detalles  
             ]
