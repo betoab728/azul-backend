@@ -34,7 +34,7 @@ class DetalleSolicitudService:
             DetalleSolicitudReadDto(
                 residuo=row.residuo,
                 cantidad=row.cantidad,
-                voluemn=row.volumen,
+                volumen=row.volumen,
                 unidad=row.unidad
             )
             for row in rows
