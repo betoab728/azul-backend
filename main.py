@@ -30,7 +30,9 @@ app = FastAPI(title="Sistema de Gestión de Residuos")
 
 
 origins = [
+    "https://azulsostenible.es",
     "http://localhost:4200",                 # desarrollo local
+    "https://www.azulsostenible.es",
     "https://azul-gestion-residuos.netlify.app"  # producción en Netlify, sin la barra al final
 ]
 
