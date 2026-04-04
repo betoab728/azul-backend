@@ -87,11 +87,22 @@ abi = [
 ]
 
 contract = w3.eth.contract(address=contract_address, abi=abi)
+# Obtener account de forma segura
+def get_account():
+    private_key = os.getenv("PRIVATE_KEY")
 
-private_key = os.getenv("PRIVATE_KEY")
-account = w3.eth.account.from_key(private_key)
+    if not private_key:
+        raise ValueError("❌ PRIVATE_KEY no definida en variables de entorno")
+
+    if not private_key.startswith("0x"):
+        private_key = "0x" + private_key  # asegurar formato
+
+    return w3.eth.account.from_key(private_key), private_key
+
 
 def guardar_hash_blockchain(id_orden: str, hash_value: str):
+
+    account, private_key = get_account()
 
     nonce = w3.eth.get_transaction_count(account.address, 'pending')
 
@@ -109,7 +120,6 @@ def guardar_hash_blockchain(id_orden: str, hash_value: str):
 
     tx_hash = w3.eth.send_raw_transaction(signed_tx.rawTransaction)
 
-    # Esperar confirmación
     receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
 
     return {
