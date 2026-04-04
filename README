@@ -15,7 +15,11 @@ app/
 │   │── db/
 │   │   └── models/
 │   │   └── database.py      
-│   └─── repositories/    # implementación de los repositorios o interfaces      
+│   │─── repositories/    # implementación de los repositorios o interfaces 
+│   │─── email/     
+│   └── blockchain/
+│          ├── web3_client.py
+│          ├── trazabilidad_contract.py
 ├── dependencies/  # dependencias de la aplicación
 │   └── tipo_residuo_dependencies.py 
 ├── services/            
