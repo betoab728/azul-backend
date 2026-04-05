@@ -24,6 +24,8 @@ class HistorialEstadoService:
         observaciones: str
     ) -> HistorialEstadoOrden:
         
+        print("actualizando estado de orden")
+        
         fecha_actual = datetime.utcnow()
 
         nuevo_historial = HistorialEstadoOrden(
