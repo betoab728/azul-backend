@@ -41,6 +41,7 @@ origins = [
     "http://localhost:4200",                 # desarrollo local
     "https://www.azulsostenible.es",
     "https://azul-gestion-residuos.netlify.app"  # producción en Netlify, sin la barra al final
+    "https://azulsostenible.com",
 ]
 
 app.add_middleware(
