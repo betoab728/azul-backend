@@ -24,6 +24,7 @@ from app.api.routes.orden_traslado_routes import router as orden_traslado_router
 from app.api.routes.trazabilidad_routes import router as trazabilidad_router
 from app.api.routes.estado_orden_routes import router as estado_orden_router
 from app.api.routes.historial_orden_routes import router as historial_orden_router
+from app.api.routes.lead_contacto_routes import router as lead_contacto_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
@@ -67,6 +68,7 @@ app.include_router(orden_traslado_router)
 app.include_router(trazabilidad_router)
 app.include_router(estado_orden_router)
 app.include_router(historial_orden_router)
+app.include_router(lead_contacto_router)
 
 
 

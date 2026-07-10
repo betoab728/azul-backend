@@ -1,4 +1,6 @@
-Generic single-database configuration.
+
+
+
 CLEAN ARCHITECTURE
 app/
 ├── api/ 

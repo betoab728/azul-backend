@@ -11,6 +11,7 @@ router = APIRouter(
     tags=["Clasificaciones"],
     dependencies=[Depends(get_current_user)]  # 🔒 protegiendo todo este router
 )
+
 #crear clasificacion de residuo
 @router.post("", response_model=ClasificacionReadDto)
 async def crear_clasificacion(

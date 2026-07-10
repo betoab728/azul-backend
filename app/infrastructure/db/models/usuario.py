@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from datetime import date, datetime
 from sqlmodel import SQLModel, Field,Relationship
 
-class Usuario(SQLModel, table=True):
+class   Usuario(SQLModel, table=True):
     __tablename__ = "usuario"
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     nombre: str = Field(max_length=100)

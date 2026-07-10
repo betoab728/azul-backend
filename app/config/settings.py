@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     SMTP_HOST: str | None = None
     SMTP_PORT: str | None = None
 
+    # --- Blockchain (Ethereum) ---
+    WEB3_PROVIDER_URL: str | None = None
+    PRIVATE_KEY: str | None = None
+
     class Config:
         env_file = ".env"
         case_sensitive = True
