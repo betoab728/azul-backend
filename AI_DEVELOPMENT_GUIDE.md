@@ -197,6 +197,7 @@ app/api/routes/usuario_routes.py
 Responsabilidad
 
 Recibir la petición HTTP.
+IMPORTANTE: Todas las rutas deben estar protegidas con jwt 
 
 Debe:
 
