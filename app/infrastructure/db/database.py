@@ -11,7 +11,7 @@ DATABASE_URL = settings.DATABASE_URL or settings.ASYNC_DATABASE_URL
 if DATABASE_URL.startswith("postgresql://") and "+asyncpg" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
-print(f"✅ DATABASE_URL cargada (forzada): {DATABASE_URL}")
+print(f"[DB] DATABASE_URL cargada (forzada): {DATABASE_URL}")
 
 engine = create_async_engine(
     DATABASE_URL,

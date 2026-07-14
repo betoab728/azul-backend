@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
@@ -14,6 +14,28 @@ class BlogRepositoryImpl(BlogRepository):
     async def get_all(self) -> List[BlogEntity]:
         result = await self.session.exec(select(BlogModel))
         return [self._to_entity(row) for row in result.all()]
+
+    async def get_by_id(self, blog_id: int) -> Optional[BlogEntity]:
+        result = await self.session.get(BlogModel, blog_id)
+        return self._to_entity(result) if result else None
+
+    async def get_publicados(self) -> List[BlogEntity]:
+        query = (
+            select(BlogModel)
+            .where(BlogModel.estado == "PUBLICADO")
+            .order_by(BlogModel.fecha_publicacion.desc())
+        )
+        result = await self.session.exec(query)
+        return [self._to_entity(row) for row in result.all()]
+
+    async def get_by_slug(self, slug: str) -> Optional[BlogEntity]:
+        query = select(BlogModel).where(
+            BlogModel.slug == slug,
+            BlogModel.estado == "PUBLICADO",
+        )
+        result = await self.session.exec(query)
+        model = result.first()
+        return self._to_entity(model) if model else None
 
     async def create(self, blog: BlogEntity) -> BlogEntity:
         db_blog = BlogModel(
@@ -31,6 +53,16 @@ class BlogRepositoryImpl(BlogRepository):
         self.session.add(db_blog)
         await self.session.commit()
         await self.session.refresh(db_blog)
+        return self._to_entity(db_blog)
+
+    async def update(self, blog: BlogEntity) -> BlogEntity:
+        db_blog = await self.session.get(BlogModel, blog.id)
+        if db_blog:
+            for field, value in blog.__dict__.items():
+                setattr(db_blog, field, value)
+            self.session.add(db_blog)
+            await self.session.commit()
+            await self.session.refresh(db_blog)
         return self._to_entity(db_blog)
 
     def _to_entity(self, model: BlogModel) -> BlogEntity:

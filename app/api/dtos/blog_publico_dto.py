@@ -3,19 +3,21 @@ from datetime import datetime
 from typing import Optional
 
 
-class BlogCreateDto(BaseModel):
+class BlogPublicoResumenDto(BaseModel):
+    id: int
     titulo: str
-    contenido: str
-    resumen: Optional[str] = None
-    imagen_portada: Optional[str] = None
-    autor: Optional[str] = None
+    slug: str
+    resumen: Optional[str]
+    imagen_portada: Optional[str]
+    autor: Optional[str]
+    fecha_publicacion: Optional[datetime]
+
+    model_config = {
+        "from_attributes": True
+    }
 
 
-class BlogUpdateEstadoDto(BaseModel):
-    estado: str
-
-
-class BlogReadDto(BaseModel):
+class BlogPublicoDetalleDto(BaseModel):
     id: int
     titulo: str
     slug: str
@@ -23,10 +25,7 @@ class BlogReadDto(BaseModel):
     contenido: str
     imagen_portada: Optional[str]
     autor: Optional[str]
-    estado: str
     fecha_publicacion: Optional[datetime]
-    created_at: datetime
-    updated_at: datetime
 
     model_config = {
         "from_attributes": True

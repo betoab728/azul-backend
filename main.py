@@ -29,6 +29,7 @@ from app.api.routes.estado_orden_routes import router as estado_orden_router
 from app.api.routes.historial_orden_routes import router as historial_orden_router
 from app.api.routes.lead_contacto_routes import router as lead_contacto_router
 from app.api.routes.blog_routes import router as blog_router
+from app.api.routes.blog_publico_routes import router as blog_publico_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Sistema de Gestión de Residuos")
@@ -79,6 +80,7 @@ app.include_router(estado_orden_router)
 app.include_router(historial_orden_router)
 app.include_router(lead_contacto_router)
 app.include_router(blog_router)
+app.include_router(blog_publico_router)
 
 
 

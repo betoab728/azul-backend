@@ -75,5 +75,5 @@ settings = Settings()
 
 # Logs informativos (solo para depuración)
 print(f"DATABASE_URL cargada: {settings.assembled_db_url}")
-print(f"SECRET_KEY detectada: {'Sí' if settings.SECRET_KEY else 'No'}")
-print(f" Entorno: {settings.ENVIRONMENT}")
+print(f"SECRET_KEY detectada: {'Si' if settings.SECRET_KEY else 'No'}")
+print(f"Entorno: {settings.ENVIRONMENT}")
