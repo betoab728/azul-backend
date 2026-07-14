@@ -1,5 +1,7 @@
+from typing import List
 from datetime import datetime
 from sqlmodel.ext.asyncio.session import AsyncSession
+from sqlmodel import select
 from app.domain.entities.blog import Blog as BlogEntity
 from app.domain.interfaces.blog_repository import BlogRepository
 from app.infrastructure.db.models.blog import Blog as BlogModel
@@ -8,6 +10,10 @@ from app.infrastructure.db.models.blog import Blog as BlogModel
 class BlogRepositoryImpl(BlogRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
+
+    async def get_all(self) -> List[BlogEntity]:
+        result = await self.session.exec(select(BlogModel))
+        return [self._to_entity(row) for row in result.all()]
 
     async def create(self, blog: BlogEntity) -> BlogEntity:
         db_blog = BlogModel(

@@ -1,8 +1,10 @@
+from typing import List
 from fastapi import APIRouter, Depends
 from app.api.auth import get_current_user
 from app.use_cases.blog.crear_blog_usecase import CrearBlogUseCase
+from app.use_cases.blog.listar_blogs_usecase import ListarBlogsUseCase
 from app.api.dtos.blog_dto import BlogCreateDto, BlogReadDto
-from app.dependencies_folder.blog_dependencies import get_crear_blog_use_case
+from app.dependencies_folder.blog_dependencies import get_crear_blog_use_case, get_listar_blogs_use_case
 
 
 router = APIRouter(
@@ -25,3 +27,11 @@ async def crear_blog(
         blog_in.autor,
     )
     return BlogReadDto(**blog.__dict__)
+
+
+@router.get("", response_model=List[BlogReadDto])
+async def listar_blogs(
+    use_case: ListarBlogsUseCase = Depends(get_listar_blogs_use_case),
+):
+    blogs = await use_case.execute()
+    return [BlogReadDto(**b.__dict__) for b in blogs]

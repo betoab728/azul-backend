@@ -4,6 +4,7 @@ from app.infrastructure.db.database import get_db
 from app.infrastructure.repositories.blog_repository_impl import BlogRepositoryImpl
 from app.domain.interfaces.blog_repository import BlogRepository
 from app.use_cases.blog.crear_blog_usecase import CrearBlogUseCase
+from app.use_cases.blog.listar_blogs_usecase import ListarBlogsUseCase
 
 
 def get_blog_repository(db: AsyncSession = Depends(get_db)) -> BlogRepository:
@@ -14,3 +15,9 @@ def get_crear_blog_use_case(
     repo: BlogRepository = Depends(get_blog_repository),
 ) -> CrearBlogUseCase:
     return CrearBlogUseCase(repo)
+
+
+def get_listar_blogs_use_case(
+    repo: BlogRepository = Depends(get_blog_repository),
+) -> ListarBlogsUseCase:
+    return ListarBlogsUseCase(repo)
